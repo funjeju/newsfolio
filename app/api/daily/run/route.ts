@@ -35,26 +35,44 @@ async function fetchNaverNews(
   const clientSecret = process.env.NAVER_CLIENT_SECRET;
   if (!clientId || !clientSecret) return [];
 
-  const query = encodeURIComponent(keywords.slice(0, 3).join(" "));
-  const url = `https://openapi.naver.com/v1/search/news.json?query=${query}&display=5&sort=date`;
+  const headers = {
+    "X-Naver-Client-Id": clientId,
+    "X-Naver-Client-Secret": clientSecret,
+  };
 
-  const res = await fetch(url, {
-    headers: {
-      "X-Naver-Client-Id": clientId,
-      "X-Naver-Client-Secret": clientSecret,
-    },
-    next: { revalidate: 0 },
-  });
-  if (!res.ok) return [];
+  const toItems = (data: any): ImpactScoreInput["newsItems"] =>
+    (data.items ?? []).map((item: any) => ({
+      title: item.title.replace(/<[^>]+>/g, ""),
+      summary: item.description.replace(/<[^>]+>/g, ""),
+      source: item.originallink?.match(/\/\/([^/]+)/)?.[1]?.replace("www.", "") ?? "",
+      url: item.originallink ?? item.link ?? "",
+      publishedAt: item.pubDate,
+    }));
 
-  const data = await res.json();
-  return (data.items ?? []).map((item: any) => ({
-    title: item.title.replace(/<[^>]+>/g, ""),
-    summary: item.description.replace(/<[^>]+>/g, ""),
-    source: item.originallink?.match(/\/\/([^/]+)/)?.[1]?.replace("www.", "") ?? "",
-    url: item.originallink ?? item.link ?? "",
-    publishedAt: item.pubDate,
-  }));
+  // 1차: 메인 키워드 단독 검색 (AND 조건 없이 결과 최대화)
+  const q1 = encodeURIComponent(keywords[0]);
+  const [r1, r2] = await Promise.all([
+    fetch(`https://openapi.naver.com/v1/search/news.json?query=${q1}&display=10&sort=date`, { headers, next: { revalidate: 0 } }),
+    // 2차: 두 번째 키워드로 보조 검색
+    keywords[1]
+      ? fetch(`https://openapi.naver.com/v1/search/news.json?query=${encodeURIComponent(keywords[1])}&display=5&sort=date`, { headers, next: { revalidate: 0 } })
+      : Promise.resolve(null),
+  ]);
+
+  const items1 = r1.ok ? toItems(await r1.json()) : [];
+  const items2 = r2?.ok ? toItems(await r2.json()) : [];
+
+  // 제목 기준 중복 제거 후 최대 10개
+  const seen = new Set<string>();
+  const merged: ImpactScoreInput["newsItems"] = [];
+  for (const item of [...items1, ...items2]) {
+    if (!seen.has(item.title)) {
+      seen.add(item.title);
+      merged.push(item);
+      if (merged.length >= 10) break;
+    }
+  }
+  return merged;
 }
 
 // ── 영향도 점수 생성 ───────────────────────────────────────────────
