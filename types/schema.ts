@@ -5,7 +5,7 @@ import { Timestamp } from 'firebase/firestore';
 // SHARED TYPES
 // ============================================
 
-export type UserRole = 'system_admin' | 'school_admin' | 'teacher' | 'student';
+export type UserRole = 'system_admin' | 'school_admin' | 'teacher' | 'student' | 'solo';
 export type ToneLevel = 1 | 2 | 3 | 4;
 export type SeasonState = 'draft' | 'setup' | 'ready' | 'running' | 'final_week' | 'finished';
 export type ConfirmationMode = 'always_teacher' | 'ai_auto' | 'mixed';

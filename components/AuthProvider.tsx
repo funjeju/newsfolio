@@ -41,16 +41,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (userDoc.exists()) {
           const userData = userDoc.data();
           if (isPublicRoute) {
-            if (userData.role === "teacher") {
-              router.push("/teacher/dashboard");
-            } else {
-              router.push("/student/dashboard");
+            // "/" 랜딩페이지는 로그인 상태에서도 그대로 보여줌
+            // /login, /join 은 로그인된 사용자를 대시보드로 보냄
+            if (pathname === "/login" || pathname === "/join") {
+              if (userData.role === "teacher") {
+                router.push("/teacher/dashboard");
+              } else if (userData.role === "solo") {
+                router.push("/solo/dashboard");
+              } else {
+                router.push("/student/dashboard");
+              }
             }
           } else {
             if (pathname.startsWith("/teacher") && userData.role !== "teacher") {
-              router.push("/student/dashboard");
+              if (userData.role === "solo") router.push("/solo/dashboard");
+              else router.push("/student/dashboard");
             } else if (pathname.startsWith("/student") && userData.role !== "student") {
-              router.push("/teacher/dashboard");
+              if (userData.role === "teacher") router.push("/teacher/dashboard");
+              else if (userData.role === "solo") router.push("/solo/dashboard");
+              else router.push("/teacher/dashboard");
+            } else if (pathname.startsWith("/solo") && userData.role !== "solo") {
+              if (userData.role === "teacher") router.push("/teacher/dashboard");
+              else router.push("/student/dashboard");
             }
           }
         }

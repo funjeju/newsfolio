@@ -9,16 +9,17 @@ import {
   getDocs, updateDoc, serverTimestamp,
 } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
-import { ArrowRightIcon, ArrowLeftIcon, CheckIcon, GraduationCapIcon, BookOpenIcon } from "lucide-react";
+import { ArrowRightIcon, ArrowLeftIcon, CheckIcon, GraduationCapIcon, BookOpenIcon, UserIcon } from "lucide-react";
 import { toast } from "sonner";
 import type { Class } from "@/types/schema";
 
 type Step = "role" | "classCode" | "account";
+type RoleType = "student" | "teacher" | "solo";
 
 export default function JoinPage() {
   const router = useRouter();
   const [step, setStep] = useState<Step>("role");
-  const [role, setRole] = useState<"student" | "teacher" | null>(null);
+  const [role, setRole] = useState<RoleType | null>(null);
 
   // classCode step
   const [classCode, setClassCode] = useState("");
@@ -32,9 +33,9 @@ export default function JoinPage() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleRoleSelect = (r: "student" | "teacher") => {
+  const handleRoleSelect = (r: RoleType) => {
     setRole(r);
-    if (r === "teacher") setStep("account");
+    if (r === "teacher" || r === "solo") setStep("account");
     else setStep("classCode");
   };
 
@@ -121,7 +122,9 @@ export default function JoinPage() {
       await setDoc(doc(db, "users", uid), userDoc);
 
       toast.success("가입 완료! 환영합니다 🎉");
-      router.push(role === "teacher" ? "/teacher/dashboard" : "/student/dashboard");
+      if (role === "teacher") router.push("/teacher/dashboard");
+      else if (role === "solo") router.push("/solo/dashboard");
+      else router.push("/student/dashboard");
     } catch (err: any) {
       const msg = err.code === "auth/email-already-in-use"
         ? "이미 사용 중인 이메일입니다."
@@ -149,7 +152,7 @@ export default function JoinPage() {
         {/* Step indicator */}
         <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
           {(["role", "classCode", "account"] as Step[])
-            .filter(s => role === "teacher" ? s !== "classCode" : true)
+            .filter(s => (role === "teacher" || role === "solo") ? s !== "classCode" : true)
             .map((s, idx, arr) => (
               <div key={s} className="flex items-center gap-2">
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs transition-colors
@@ -197,6 +200,18 @@ export default function JoinPage() {
                   </div>
                 </button>
               </div>
+              <button
+                onClick={() => handleRoleSelect("solo")}
+                className="w-full flex items-center gap-4 p-5 rounded-2xl border border-border/50 bg-white/5 hover:bg-emerald-500/10 hover:border-emerald-500/30 transition-all group"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center group-hover:bg-emerald-500/20 transition-colors flex-shrink-0">
+                  <UserIcon className="w-6 h-6 text-emerald-400" />
+                </div>
+                <div className="text-left">
+                  <div className="font-bold">혼자 참여하기</div>
+                  <div className="text-xs text-muted-foreground mt-0.5">학급 없이 개인으로 섹터 투자 체험</div>
+                </div>
+              </button>
             </div>
           )}
 
@@ -268,7 +283,7 @@ export default function JoinPage() {
               <div className="flex items-center gap-3">
                 <button
                   type="button"
-                  onClick={() => setStep(role === "teacher" ? "role" : "classCode")}
+                  onClick={() => setStep(role === "teacher" || role === "solo" ? "role" : "classCode")}
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
                   <ArrowLeftIcon className="w-4 h-4" />
@@ -278,6 +293,8 @@ export default function JoinPage() {
                   <p className="text-sm text-muted-foreground">
                     {role === "student" && foundClass
                       ? `${foundClass.className} 합류`
+                      : role === "solo"
+                      ? "개인 투자 시뮬레이터"
                       : "교사 계정 생성"}
                   </p>
                 </div>
