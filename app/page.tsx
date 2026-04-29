@@ -15,29 +15,59 @@ import * as motion from "framer-motion/client";
 
 // ── Mock Data ──────────────────────────────────────────────────
 
-const HOT_NEWS = {
-  headline: "미국 상무부, 반도체 수출 규제 완화 발표…HBM 포함",
-  summary: "미 상무부가 HBM을 포함한 첨단 반도체 수출 규제를 일부 완화한다고 발표했다. 삼성·SK하이닉스 등 국내 기업들의 수혜가 예상된다.",
-  source: "한국경제",
-  time: "오전 7:30",
-  url: "https://www.hankyung.com",
-  sectorName: "반도체",
-  sectorIcon: "💻",
-  dailyReturn: 2.34,
-  impactScore: 4,
-};
+interface HeroNews {
+  headline: string;
+  summary: string;
+  source: string;
+  time: string;
+  url: string;
+  sectorName: string;
+  sectorIcon: string;
+  dailyReturn: number;
+  impactScore: number;
+}
 
-const COLD_NEWS = {
-  headline: "부동산 PF 부실 5조 원 확인…중소 건설사 연쇄 위기 우려",
-  summary: "금융권에서 확인된 부동산 PF 부실 규모가 5조 원을 넘어섰다. 중소 건설사 폐업 도미노 우려가 커지며 건설 섹터 전반이 압박을 받고 있다.",
-  source: "매일경제",
-  time: "오전 8:15",
-  url: "https://www.mk.co.kr",
-  sectorName: "부동산·건설",
-  sectorIcon: "🏗️",
-  dailyReturn: -2.81,
-  impactScore: -4,
-};
+const HOT_NEWS: HeroNews[] = [
+  {
+    headline: "미국 상무부, 반도체 수출 규제 완화 발표…HBM 포함",
+    summary: "미 상무부가 HBM을 포함한 첨단 반도체 수출 규제를 일부 완화한다고 발표했다. 삼성·SK하이닉스 등 국내 기업들의 수혜가 예상된다.",
+    source: "한국경제", time: "오전 7:30", url: "https://www.hankyung.com",
+    sectorName: "반도체", sectorIcon: "💻", dailyReturn: 3.24, impactScore: 4,
+  },
+  {
+    headline: "넥슨 신작 '아크 레이더스' 글로벌 출시 첫날 매출 신기록",
+    summary: "넥슨의 신작 슈터 게임이 글로벌 서비스 첫날 역대 최고 동시 접속자 수를 기록했다.",
+    source: "게임메카", time: "오전 9:10", url: "https://www.gamemeca.com",
+    sectorName: "게임", sectorIcon: "🎮", dailyReturn: 2.11, impactScore: 3,
+  },
+  {
+    headline: "정부, 신재생에너지 보조금 2조 원 추가 편성…태양광·ESS 수혜",
+    summary: "정부가 친환경 에너지 전환 가속화를 위해 관련 기업 보조금을 2배로 늘리기로 했다.",
+    source: "매일경제", time: "오전 8:45", url: "https://www.mk.co.kr",
+    sectorName: "친환경에너지", sectorIcon: "🌱", dailyReturn: 1.45, impactScore: 2,
+  },
+];
+
+const COLD_NEWS: HeroNews[] = [
+  {
+    headline: "부동산 PF 부실 5조 원 확인…중소 건설사 연쇄 위기 우려",
+    summary: "금융권에서 확인된 부동산 PF 부실 규모가 5조 원을 넘어섰다. 중소 건설사 폐업 도미노 우려가 커지며 건설 섹터 전반이 압박을 받고 있다.",
+    source: "매일경제", time: "오전 8:15", url: "https://www.mk.co.kr",
+    sectorName: "건설", sectorIcon: "🏗️", dailyReturn: -4.89, impactScore: -5,
+  },
+  {
+    headline: "미·중 무역 협상 결렬…상호 관세 추가 부과 임박",
+    summary: "미국과 중국의 고위급 무역 협상이 합의 없이 종료됐다. 양측이 추가 관세를 예고하면서 글로벌 공급망 불안이 고조되고 있다.",
+    source: "연합뉴스", time: "오전 7:55", url: "https://www.yna.co.kr",
+    sectorName: "국제정세", sectorIcon: "🌐", dailyReturn: -3.67, impactScore: -4,
+  },
+  {
+    headline: "시카고 밀 선물 2주 만에 8% 급등…국내 식품업계 원가 비상",
+    summary: "국제 밀 가격이 급등하면서 라면·제분 업체들의 원가 부담이 크게 늘었다. 하반기 제품 가격 인상 가능성이 제기된다.",
+    source: "한국경제", time: "오전 9:30", url: "https://www.hankyung.com",
+    sectorName: "식품", sectorIcon: "🍔", dailyReturn: -2.14, impactScore: -3,
+  },
+];
 
 const SECTOR_NEWS: Record<string, { title: string; source: string; url: string; time: string }[]> = {
   semiconductor: [
@@ -219,42 +249,65 @@ export default function PublicLeaderboardPage() {
             transition={{ delay: 0.1 }}
             className="lg:col-span-3 rounded-2xl overflow-hidden border border-amber-200 shadow-md"
           >
-            {/* 카드 헤더 */}
             <div className="bg-gradient-to-r from-amber-400 to-orange-500 px-5 py-3 flex items-center justify-between">
               <div className="flex items-center gap-2 text-white font-bold">
                 <FlameIcon className="w-5 h-5" />
                 오늘의 강력한 한방 🔥
               </div>
               <span className="text-xs bg-white/20 text-white px-2 py-0.5 rounded-full font-bold">
-                {HOT_NEWS.sectorIcon} {HOT_NEWS.sectorName}
+                TOP {HOT_NEWS.length}
               </span>
             </div>
-            {/* 카드 본문 */}
-            <div className="bg-white p-5 space-y-3">
-              <div className="flex items-start justify-between gap-3">
-                <h3 className="font-bold text-slate-800 text-base md:text-lg leading-snug flex-1">
-                  {HOT_NEWS.headline}
-                </h3>
-                <span className="text-2xl font-display font-bold text-emerald-600 whitespace-nowrap flex-shrink-0">
-                  +{HOT_NEWS.dailyReturn.toFixed(2)}%
-                </span>
-              </div>
-              <p className="text-sm text-slate-500 leading-relaxed">{HOT_NEWS.summary}</p>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-xs text-slate-400">
-                  <span className="font-semibold text-indigo-600">{HOT_NEWS.source}</span>
-                  <span>·</span>
-                  <span>{HOT_NEWS.time}</span>
+            <div className="bg-white divide-y divide-slate-100">
+              {HOT_NEWS.map((news, idx) => (
+                <div key={idx} className={cn("p-4 space-y-1.5", idx === 0 ? "p-5" : "")}>
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-start gap-2.5 flex-1 min-w-0">
+                      <span className={cn(
+                        "flex-shrink-0 font-bold text-amber-500 mt-0.5",
+                        idx === 0 ? "text-base" : "text-sm"
+                      )}>
+                        {idx === 0 ? "🥇" : idx === 1 ? "🥈" : "🥉"}
+                      </span>
+                      <div className="min-w-0">
+                        <span className="text-[10px] font-bold text-amber-600 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded-full mr-1.5">
+                          {news.sectorIcon} {news.sectorName}
+                        </span>
+                        <h3 className={cn(
+                          "font-bold text-slate-800 leading-snug mt-1",
+                          idx === 0 ? "text-base md:text-lg" : "text-sm"
+                        )}>
+                          {news.headline}
+                        </h3>
+                        {idx === 0 && (
+                          <p className="text-sm text-slate-500 leading-relaxed mt-1.5">{news.summary}</p>
+                        )}
+                      </div>
+                    </div>
+                    <span className={cn(
+                      "font-display font-bold text-emerald-600 whitespace-nowrap flex-shrink-0",
+                      idx === 0 ? "text-2xl" : "text-base"
+                    )}>
+                      +{news.dailyReturn.toFixed(2)}%
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between pl-7">
+                    <div className="flex items-center gap-1.5 text-xs text-slate-400">
+                      <span className="font-semibold text-indigo-600">{news.source}</span>
+                      <span>·</span>
+                      <span>{news.time}</span>
+                    </div>
+                    <a
+                      href={news.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1 text-xs font-bold text-amber-600 hover:text-amber-800 transition-colors"
+                    >
+                      보기 <ExternalLinkIcon className="w-3 h-3" />
+                    </a>
+                  </div>
                 </div>
-                <a
-                  href={HOT_NEWS.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-xs font-bold text-amber-600 hover:text-amber-800 transition-colors"
-                >
-                  뉴스 보기 <ExternalLinkIcon className="w-3 h-3" />
-                </a>
-              </div>
+              ))}
             </div>
           </motion.div>
 
@@ -343,34 +396,59 @@ export default function PublicLeaderboardPage() {
                 오늘의 아래로 한방 💥
               </div>
               <span className="text-xs bg-white/20 text-white px-2 py-0.5 rounded-full font-bold">
-                {COLD_NEWS.sectorIcon} {COLD_NEWS.sectorName}
+                TOP {COLD_NEWS.length}
               </span>
             </div>
-            <div className="bg-white p-5 space-y-3">
-              <div className="flex items-start justify-between gap-3">
-                <h3 className="font-bold text-slate-800 text-base md:text-lg leading-snug flex-1">
-                  {COLD_NEWS.headline}
-                </h3>
-                <span className="text-2xl font-display font-bold text-red-500 whitespace-nowrap flex-shrink-0">
-                  {COLD_NEWS.dailyReturn.toFixed(2)}%
-                </span>
-              </div>
-              <p className="text-sm text-slate-500 leading-relaxed">{COLD_NEWS.summary}</p>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-xs text-slate-400">
-                  <span className="font-semibold text-indigo-600">{COLD_NEWS.source}</span>
-                  <span>·</span>
-                  <span>{COLD_NEWS.time}</span>
+            <div className="bg-white divide-y divide-slate-100">
+              {COLD_NEWS.map((news, idx) => (
+                <div key={idx} className={cn("p-4 space-y-1.5", idx === 0 ? "p-5" : "")}>
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-start gap-2.5 flex-1 min-w-0">
+                      <span className={cn(
+                        "flex-shrink-0 font-bold text-rose-400 mt-0.5",
+                        idx === 0 ? "text-base" : "text-sm"
+                      )}>
+                        {idx === 0 ? "💥" : idx === 1 ? "🔻" : "📉"}
+                      </span>
+                      <div className="min-w-0">
+                        <span className="text-[10px] font-bold text-rose-600 bg-rose-50 border border-rose-200 px-1.5 py-0.5 rounded-full mr-1.5">
+                          {news.sectorIcon} {news.sectorName}
+                        </span>
+                        <h3 className={cn(
+                          "font-bold text-slate-800 leading-snug mt-1",
+                          idx === 0 ? "text-base md:text-lg" : "text-sm"
+                        )}>
+                          {news.headline}
+                        </h3>
+                        {idx === 0 && (
+                          <p className="text-sm text-slate-500 leading-relaxed mt-1.5">{news.summary}</p>
+                        )}
+                      </div>
+                    </div>
+                    <span className={cn(
+                      "font-display font-bold text-red-500 whitespace-nowrap flex-shrink-0",
+                      idx === 0 ? "text-2xl" : "text-base"
+                    )}>
+                      {news.dailyReturn.toFixed(2)}%
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between pl-7">
+                    <div className="flex items-center gap-1.5 text-xs text-slate-400">
+                      <span className="font-semibold text-indigo-600">{news.source}</span>
+                      <span>·</span>
+                      <span>{news.time}</span>
+                    </div>
+                    <a
+                      href={news.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1 text-xs font-bold text-rose-600 hover:text-rose-800 transition-colors"
+                    >
+                      보기 <ExternalLinkIcon className="w-3 h-3" />
+                    </a>
+                  </div>
                 </div>
-                <a
-                  href={COLD_NEWS.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-xs font-bold text-rose-600 hover:text-rose-800 transition-colors"
-                >
-                  뉴스 보기 <ExternalLinkIcon className="w-3 h-3" />
-                </a>
-              </div>
+              ))}
             </div>
           </motion.div>
 
