@@ -264,10 +264,8 @@ export async function GET(req: NextRequest) {
     const succeeded = briefingResults.filter(r => r.status === "fulfilled").length;
     runLog.push(`Briefings created: ${succeeded}/${classSnap.size}`);
 
-    // 10. 포트폴리오 수익률 반영
-    const portfolioSnap = await db.collection("portfolios")
-      .where("ownerType", "==", "group")
-      .get();
+    // 10. 포트폴리오 수익률 반영 (그룹 + 개인 솔로 모두)
+    const portfolioSnap = await db.collection("portfolios").get();
 
     const portfolioTasks = portfolioSnap.docs.map(async (pDoc) => {
       const portfolio = pDoc.data() as any;

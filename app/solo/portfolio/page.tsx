@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CheckIcon, InfoIcon, TrendingUpIcon, WalletIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import {
@@ -9,46 +9,69 @@ import {
 } from "recharts";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useUser } from "@/lib/hooks/useUser";
+import { usePublicScores } from "@/lib/hooks/usePublicScores";
+import { useSoloPortfolio, saveSoloPortfolio } from "@/lib/hooks/useSoloPortfolio";
 
+// Sector IDs match the daily cron pipeline
 const ALL_SECTORS = [
-  { id: "semi",    name: "반도체",   icon: "💻", desc: "메모리·시스템반도체·장비",   todayReturn: 2.1,  weekReturn: 4.2  },
-  { id: "bio",     name: "바이오",   icon: "🧬", desc: "신약개발·의료기기·헬스케어", todayReturn: -0.8, weekReturn: -1.5 },
-  { id: "fin",     name: "금융",     icon: "🏦", desc: "은행·증권·보험·핀테크",      todayReturn: 0.5,  weekReturn: 1.2  },
-  { id: "energy",  name: "에너지",   icon: "⚡", desc: "재생에너지·원자력·ESS",       todayReturn: 1.3,  weekReturn: 3.1  },
-  { id: "auto",    name: "자동차",   icon: "🚗", desc: "완성차·전기차·배터리",        todayReturn: -0.3, weekReturn: 0.8  },
-  { id: "food",    name: "식품·소비", icon: "🛒", desc: "식음료·유통·화장품",         todayReturn: 0.2,  weekReturn: -0.4 },
-  { id: "defense", name: "방산",     icon: "🛡️", desc: "무기·항공우주·방위산업",     todayReturn: 1.8,  weekReturn: 5.6  },
-  { id: "media",   name: "미디어",   icon: "🎬", desc: "엔터·게임·콘텐츠·OTT",       todayReturn: -1.2, weekReturn: -2.8 },
-  { id: "real",    name: "부동산",   icon: "🏢", desc: "건설·부동산개발·리츠",        todayReturn: 0.0,  weekReturn: -0.9 },
-  { id: "infra",   name: "인프라",   icon: "🏗️", desc: "통신·유틸리티·플랫폼",       todayReturn: 0.6,  weekReturn: 1.8  },
-];
-
-const HISTORY = [
-  { date: "4/22", value: 1000000 },
-  { date: "4/23", value: 1012000 },
-  { date: "4/24", value: 1008000 },
-  { date: "4/25", value: 1025000 },
-  { date: "4/28", value: 1019000 },
-  { date: "4/29", value: 1038000 },
+  { id: "semiconductor", name: "반도체",      icon: "💻", desc: "메모리·시스템반도체·장비" },
+  { id: "automotive",    name: "자동차",      icon: "🚗", desc: "완성차·전기차·배터리" },
+  { id: "game",          name: "게임",        icon: "🎮", desc: "모바일·PC·콘솔게임" },
+  { id: "content",       name: "콘텐츠",      icon: "🎬", desc: "엔터·OTT·K콘텐츠" },
+  { id: "travel",        name: "여행·항공",   icon: "✈️", desc: "항공·여행·관광" },
+  { id: "green_energy",  name: "친환경에너지", icon: "🌱", desc: "태양광·풍력·수소·ESS" },
+  { id: "food",          name: "식품",        icon: "🍔", desc: "식음료·유통·원자재" },
+  { id: "construction",  name: "건설",        icon: "🏗️", desc: "건설·부동산·PF" },
+  { id: "geopolitics",   name: "국제정세",    icon: "🌐", desc: "미중갈등·지정학·관세" },
+  { id: "global_trade",  name: "글로벌무역",  icon: "🚢", desc: "수출·해상운임·물류" },
 ];
 
 const MAX_SECTORS = 5;
 
 export default function SoloPortfolio() {
+  const { user, firebaseUid } = useUser();
+  const userId = user?.id ?? firebaseUid;
+  const { scores } = usePublicScores();
+  const { portfolio, snapshots } = useSoloPortfolio(userId);
+
   const [allocations, setAllocations] = useState<Record<string, number>>({
-    semi: 40,
-    bio: 35,
-    fin: 15,
-    // 나머지 10%는 자동으로 현금
+    semiconductor: 40,
+    game: 35,
+    green_energy: 15,
   });
   const [isSaving, setIsSaving] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  // Load saved allocations from Firestore on first load
+  useEffect(() => {
+    if (!loaded && portfolio?.allocations) {
+      const next: Record<string, number> = {};
+      for (const alloc of portfolio.allocations) {
+        if (alloc.sectorId !== "cash") {
+          next[alloc.sectorId] = Math.round(alloc.weight * 100);
+        }
+      }
+      if (Object.keys(next).length > 0) {
+        setAllocations(next);
+      }
+      setLoaded(true);
+    }
+  }, [portfolio, loaded]);
 
   const selectedIds = Object.keys(allocations);
   const sectorTotal = Object.values(allocations).reduce((s, v) => s + v, 0);
-  // 현금은 항상 나머지를 채움
   const cashWeight = Math.max(0, 100 - sectorTotal);
   const isOver = sectorTotal > 100;
   const isValid = !isOver && selectedIds.length > 0;
+
+  // Merge real dailyReturn from publicScores
+  const getSectorReturn = (id: string): number => {
+    if (scores?.sectorScores) {
+      return scores.sectorScores.find(s => s.sectorId === id)?.dailyReturn ?? 0;
+    }
+    return 0;
+  };
 
   const handleToggleSector = (id: string) => {
     if (allocations[id] !== undefined) {
@@ -60,7 +83,6 @@ export default function SoloPortfolio() {
         toast.error(`최대 ${MAX_SECTORS}개 섹터까지 선택할 수 있어요.`);
         return;
       }
-      // 현금에서 가져와 새 섹터에 배분 (남은 현금의 절반)
       const giveAmount = Math.min(Math.floor(cashWeight / 2), 20);
       setAllocations({ ...allocations, [id]: Math.max(5, giveAmount) });
     }
@@ -72,10 +94,8 @@ export default function SoloPortfolio() {
 
   const handleAutoBalance = () => {
     if (selectedIds.length === 0) return;
-    // 섹터에 80% 균등 배분, 현금 20% 유지
-    const totalForSectors = 80;
-    const per = Math.floor(totalForSectors / selectedIds.length);
-    const remainder = totalForSectors - per * selectedIds.length;
+    const per = Math.floor(80 / selectedIds.length);
+    const remainder = 80 - per * selectedIds.length;
     const next: Record<string, number> = {};
     selectedIds.forEach((id, i) => {
       next[id] = per + (i === 0 ? remainder : 0);
@@ -86,16 +106,31 @@ export default function SoloPortfolio() {
 
   const handleSave = async () => {
     if (!isValid) return;
+    if (!userId) { toast.error("로그인이 필요해요."); return; }
     setIsSaving(true);
-    await new Promise(r => setTimeout(r, 800));
-    toast.success(`포트폴리오 저장! 현금 ${cashWeight}% 포함`);
-    setIsSaving(false);
+    try {
+      const allocs = [
+        ...selectedIds.map(id => ({ sectorId: id, weight: allocations[id] / 100 })),
+        ...(cashWeight > 0 ? [{ sectorId: "cash", weight: cashWeight / 100 }] : []),
+      ];
+      await saveSoloPortfolio(userId, allocs);
+      toast.success(`포트폴리오 저장 완료! 현금 ${cashWeight}% 포함`);
+    } catch {
+      toast.error("저장에 실패했어요. 다시 시도해주세요.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
-  // 차트 데이터 (섹터 + 현금)
+  // History chart data
+  const historyData = snapshots.length > 0
+    ? snapshots.map(s => ({ date: s.date.slice(5), value: s.value }))
+    : [{ date: "시작", value: portfolio?.currentValue ?? 1_000_000 }];
+
+  // Bar chart (sectors + cash)
   const barData = [
     ...ALL_SECTORS.filter(s => allocations[s.id] !== undefined).map(s => ({
-      name: s.name, weight: allocations[s.id], isCash: false, return: s.todayReturn,
+      name: s.name, weight: allocations[s.id], isCash: false, return: getSectorReturn(s.id),
     })),
     ...(cashWeight > 0 ? [{ name: "현금", weight: cashWeight, isCash: true, return: 0 }] : []),
   ];
@@ -105,7 +140,8 @@ export default function SoloPortfolio() {
       <div>
         <h1 className="text-2xl font-display font-bold text-slate-800">섹터 투자 설정</h1>
         <p className="text-sm text-slate-400 mt-0.5">
-          투자할 섹터를 고르고 비중을 설정하세요. 남은 비중은 <span className="font-semibold text-slate-600">현금</span>으로 자동 보유됩니다.
+          투자할 섹터를 고르고 비중을 설정하세요. 남은 비중은{" "}
+          <span className="font-semibold text-slate-600">현금</span>으로 자동 보유됩니다.
         </p>
       </div>
 
@@ -123,6 +159,8 @@ export default function SoloPortfolio() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {ALL_SECTORS.map(sector => {
                 const isSelected = allocations[sector.id] !== undefined;
+                const todayReturn = getSectorReturn(sector.id);
+                const hasRealReturn = scores !== null;
                 return (
                   <button
                     key={sector.id}
@@ -140,12 +178,16 @@ export default function SoloPortfolio() {
                       <div className="text-[10px] text-slate-400 truncate">{sector.desc}</div>
                     </div>
                     <div className="text-right flex-shrink-0">
-                      <div className={cn(
-                        "text-xs font-bold",
-                        sector.todayReturn >= 0 ? "text-emerald-600" : "text-red-500"
-                      )}>
-                        {sector.todayReturn >= 0 ? "+" : ""}{sector.todayReturn.toFixed(1)}%
-                      </div>
+                      {hasRealReturn ? (
+                        <div className={cn(
+                          "text-xs font-bold",
+                          todayReturn >= 0 ? "text-emerald-600" : "text-red-500"
+                        )}>
+                          {todayReturn >= 0 ? "+" : ""}{todayReturn.toFixed(1)}%
+                        </div>
+                      ) : (
+                        <div className="text-xs text-slate-300">-</div>
+                      )}
                       {isSelected && <CheckIcon className="w-4 h-4 text-emerald-500 ml-auto mt-0.5" />}
                     </div>
                   </button>
@@ -269,12 +311,15 @@ export default function SoloPortfolio() {
 
           {/* Portfolio History */}
           <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
-            <h2 className="font-bold text-slate-700 mb-4 flex items-center gap-2 text-sm">
+            <h2 className="font-bold text-slate-700 mb-1 flex items-center gap-2 text-sm">
               <TrendingUpIcon className="w-4 h-4 text-emerald-500" /> 수익 추이
             </h2>
-            <div className="h-40">
+            <div className="text-2xl font-display font-bold text-slate-800 mb-3">
+              {(portfolio?.currentValue ?? 1_000_000).toLocaleString()}원
+            </div>
+            <div className="h-36">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={HISTORY} margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>
+                <AreaChart data={historyData} margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>
                   <defs>
                     <linearGradient id="pg" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#10b981" stopOpacity={0.25} />
@@ -283,7 +328,11 @@ export default function SoloPortfolio() {
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
                   <XAxis dataKey="date" tick={{ fontSize: 10, fill: "#94a3b8" }} />
-                  <YAxis tick={{ fontSize: 10, fill: "#94a3b8" }} tickFormatter={v => `${(v / 10000).toFixed(0)}만`} width={36} />
+                  <YAxis
+                    tick={{ fontSize: 10, fill: "#94a3b8" }}
+                    tickFormatter={v => `${(v / 10000).toFixed(0)}만`}
+                    width={36}
+                  />
                   <Tooltip
                     contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 8, fontSize: 12 }}
                     formatter={(v: any) => [`${(v as number).toLocaleString()}원`]}
@@ -294,12 +343,12 @@ export default function SoloPortfolio() {
             </div>
           </div>
 
-          {/* Allocation Bar — 현금 포함 */}
+          {/* Allocation Bar */}
           {barData.length > 0 && (
             <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
               <h2 className="font-bold text-slate-700 mb-1 text-sm">현재 배분</h2>
               <p className="text-xs text-slate-400 mb-3">
-                회색 = 현금 · 초록/빨강 = 오늘 등락
+                {scores ? "회색 = 현금 · 초록/빨강 = 오늘 등락" : "회색 = 현금 · 등락은 장 마감 후 표시"}
               </p>
               <div className="h-36">
                 <ResponsiveContainer width="100%" height="100%">
@@ -315,7 +364,11 @@ export default function SoloPortfolio() {
                       {barData.map((entry, i) => (
                         <Cell
                           key={i}
-                          fill={entry.isCash ? "#94a3b8" : entry.return >= 0 ? "#10b981" : "#f43f5e"}
+                          fill={
+                            entry.isCash ? "#94a3b8"
+                              : scores === null ? "#10b981"
+                              : entry.return >= 0 ? "#10b981" : "#f43f5e"
+                          }
                         />
                       ))}
                     </Bar>
