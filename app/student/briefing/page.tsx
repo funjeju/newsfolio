@@ -2,13 +2,16 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { BookOpenIcon, UsersIcon, CheckCircle2Icon, ChevronRightIcon } from "lucide-react";
+import {
+  BookOpenIcon, UsersIcon, CheckCircle2Icon, ChevronRightIcon,
+  SparklesIcon, ZapIcon, FlameIcon,
+} from "lucide-react";
 import { SectorCard } from "@/components/briefing/SectorCard";
 import { BriefingStatusIndicator } from "@/components/leaderboard/BriefingStatusIndicator";
 import Link from "next/link";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
-// Mock briefing data (will be replaced with Firestore subscription)
 const MOCK_BRIEFING = {
   date: "2026년 4월 29일 (화)",
   status: "confirmed" as const,
@@ -101,33 +104,88 @@ export default function StudentBriefingPage() {
     toast.success("🎉 오늘의 브리핑 읽기 완료! +10P");
   };
 
+  const hotSectors = MOCK_BRIEFING.sectors.filter(s => s.impactScore >= 3);
+  const coldSectors = MOCK_BRIEFING.sectors.filter(s => s.impactScore <= -4);
+  const totalObjections = MOCK_BRIEFING.sectors.reduce((sum, s) => sum + s.objectionCount, 0);
+
   return (
-    <div className="max-w-3xl mx-auto space-y-6 pb-20">
+    <div className="max-w-3xl mx-auto space-y-5 pb-20">
+
       {/* Header */}
       <div className="pt-2">
-        <div className="flex items-center gap-2 mb-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-500/10 text-brand-300 text-sm font-bold border border-brand-500/30">
+        <div className="flex items-center gap-2 mb-3 flex-wrap">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-50 text-indigo-700 text-sm font-bold border border-indigo-200">
             <BookOpenIcon className="w-4 h-4" />
             오늘의 뉴스 브리핑
           </div>
-          <span className="text-sm text-muted-foreground">{MOCK_BRIEFING.date}</span>
+          <span className="text-sm text-slate-400">{MOCK_BRIEFING.date}</span>
+          <span className="inline-flex items-center gap-1 text-xs font-bold bg-green-50 text-green-700 border border-green-200 px-2 py-1 rounded-full">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+            AI 분석 완료
+          </span>
         </div>
-        <h1 className="text-2xl md:text-3xl font-display font-bold leading-snug">
+        <h1 className="text-2xl md:text-3xl font-display font-bold leading-snug text-slate-800">
           {MOCK_BRIEFING.headline}
         </h1>
       </div>
 
-      {/* Briefing Status Indicator */}
-      <div className="glass p-5 rounded-2xl border border-border/50">
-        <p className="text-sm text-muted-foreground text-center mb-6">오늘 브리핑 진행 상태</p>
+      {/* Quick Stats Bar */}
+      <div className="grid grid-cols-3 gap-3">
+        <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-center">
+          <div className="text-xl font-bold text-emerald-600">{hotSectors.length}</div>
+          <div className="text-xs text-slate-500 mt-0.5">🚀 상승 섹터</div>
+        </div>
+        <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-center">
+          <div className="text-xl font-bold text-red-500">{coldSectors.length}</div>
+          <div className="text-xs text-slate-500 mt-0.5">💥 하락 섹터</div>
+        </div>
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-center">
+          <div className="text-xl font-bold text-amber-600">{totalObjections}</div>
+          <div className="text-xs text-slate-500 mt-0.5">🗣️ 이의제기</div>
+        </div>
+      </div>
+
+      {/* Briefing Status */}
+      <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl">
+        <div className="flex items-center gap-2 mb-4 font-bold text-slate-700 text-sm">
+          <SparklesIcon className="w-4 h-4 text-indigo-500" />
+          오늘 브리핑 진행 상태
+        </div>
         <BriefingStatusIndicator briefing={null} />
       </div>
 
+      {/* My Sectors Highlight */}
+      {MOCK_BRIEFING.sectors.some(s => s.isMine) && (
+        <div className="bg-indigo-50 border border-indigo-200 rounded-2xl p-4">
+          <div className="flex items-center gap-2 mb-3 font-bold text-indigo-700 text-sm">
+            <ZapIcon className="w-4 h-4" />
+            내 섹터 오늘 성적
+          </div>
+          <div className="flex gap-3 flex-wrap">
+            {MOCK_BRIEFING.sectors.filter(s => s.isMine).map(s => (
+              <div key={s.sectorId} className={cn(
+                "flex items-center gap-2 px-3 py-2 rounded-xl border text-sm font-bold",
+                s.dailyReturn > 0
+                  ? "bg-emerald-50 border-emerald-200 text-emerald-700"
+                  : s.dailyReturn < 0
+                  ? "bg-red-50 border-red-200 text-red-600"
+                  : "bg-white border-slate-200 text-slate-600"
+              )}>
+                <span>{s.sectorIcon}</span>
+                <span>{s.sectorName}</span>
+                <span className="font-mono">{s.dailyReturn > 0 ? "+" : ""}{s.dailyReturn.toFixed(2)}%</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Sector Cards */}
       <div className="space-y-2">
-        <h2 className="text-xl font-bold px-1 flex items-center gap-2">
-          섹터별 영향도 분석
-          <span className="text-sm font-normal text-muted-foreground">(10개 섹터)</span>
+        <h2 className="text-lg font-bold px-1 text-slate-800 flex items-center gap-2">
+          섹터별 AI 분석
+          <span className="text-sm font-normal text-slate-400">({MOCK_BRIEFING.sectors.length}개 섹터)</span>
+          <FlameIcon className="w-4 h-4 text-orange-400 fill-orange-400" />
         </h2>
         <div className="space-y-3">
           {MOCK_BRIEFING.sectors.map((sector, index) => (
@@ -137,23 +195,23 @@ export default function StudentBriefingPage() {
       </div>
 
       {/* Class Activity Summary */}
-      <div className="glass rounded-2xl p-5 border border-border/50">
-        <h3 className="font-semibold mb-4 flex items-center gap-2">
-          <UsersIcon className="w-4 h-4 text-brand-400" />
+      <div className="bg-white border border-slate-200 shadow-sm rounded-2xl p-5">
+        <h3 className="font-bold text-slate-700 mb-4 flex items-center gap-2">
+          <UsersIcon className="w-4 h-4 text-indigo-500" />
           우리 반 활동 현황
         </h3>
         <div className="grid grid-cols-3 gap-4 text-center">
           <div>
-            <div className="text-2xl font-bold text-brand-400">{MOCK_BRIEFING.classActivity.sourceSubmissions}</div>
-            <div className="text-xs text-muted-foreground mt-1">출처 제출</div>
+            <div className="text-2xl font-bold text-indigo-600">{MOCK_BRIEFING.classActivity.sourceSubmissions}</div>
+            <div className="text-xs text-slate-400 mt-1">출처 제출</div>
           </div>
           <div>
-            <div className="text-2xl font-bold text-orange-400">{MOCK_BRIEFING.classActivity.objections}</div>
-            <div className="text-xs text-muted-foreground mt-1">이의제기</div>
+            <div className="text-2xl font-bold text-amber-500">{MOCK_BRIEFING.classActivity.objections}</div>
+            <div className="text-xs text-slate-400 mt-1">이의제기</div>
           </div>
           <div>
-            <div className="text-2xl font-bold text-yellow-400">{MOCK_BRIEFING.classActivity.pendingConfirm}</div>
-            <div className="text-xs text-muted-foreground mt-1">컨펌 대기</div>
+            <div className="text-2xl font-bold text-rose-500">{MOCK_BRIEFING.classActivity.pendingConfirm}</div>
+            <div className="text-xs text-slate-400 mt-1">컨펌 대기</div>
           </div>
         </div>
       </div>
@@ -163,18 +221,25 @@ export default function StudentBriefingPage() {
         {!completed ? (
           <button
             onClick={handleComplete}
-            className="flex items-center gap-3 px-8 py-4 bg-brand-500 text-white rounded-2xl font-bold hover:bg-brand-600 transition-all shadow-[0_4px_20px_rgba(99,102,241,0.4)] hover:shadow-[0_6px_28px_rgba(99,102,241,0.5)]"
+            className="flex items-center gap-3 px-8 py-4 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-700 transition-all shadow-[0_4px_20px_rgba(99,102,241,0.35)] hover:shadow-[0_6px_28px_rgba(99,102,241,0.45)]"
           >
             <CheckCircle2Icon className="w-5 h-5" />
             다 읽었어요!
           </button>
         ) : (
-          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col items-center gap-4">
-            <div className="flex items-center gap-2 text-brand-400 font-bold bg-brand-500/10 px-6 py-3 rounded-full border border-brand-500/30">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex flex-col items-center gap-4"
+          >
+            <div className="flex items-center gap-2 text-emerald-700 font-bold bg-emerald-50 px-6 py-3 rounded-full border border-emerald-200">
               <CheckCircle2Icon className="w-5 h-5" />
-              오늘 브리핑 완료! 🎉
+              오늘 브리핑 완료! 🎉 +10P
             </div>
-            <Link href="/student/objections/new" className="flex items-center gap-2 px-6 py-3 bg-card border border-border rounded-2xl font-bold hover:bg-muted transition-colors">
+            <Link
+              href="/student/objections/new"
+              className="flex items-center gap-2 px-6 py-3 bg-white border border-slate-200 rounded-2xl font-bold hover:bg-indigo-50 hover:border-indigo-200 transition-colors text-slate-700"
+            >
               이의제기 작성하기 <ChevronRightIcon className="w-4 h-4" />
             </Link>
           </motion.div>
