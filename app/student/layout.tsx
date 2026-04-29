@@ -43,7 +43,7 @@ export default function StudentLayout({ children }: { children: ReactNode }) {
       {/* Desktop Sidebar */}
       <aside className="w-64 border-r border-slate-200 bg-white hidden md:flex flex-col z-20 sticky top-0 h-screen shadow-sm">
         <div className="p-6 border-b border-slate-100">
-          <Link href="/student/dashboard" className="flex items-center gap-2 font-display font-bold text-xl">
+          <Link href="/" className="flex items-center gap-2 font-display font-bold text-xl">
             <span>📰</span>
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-violet-600">
               Newsfolio

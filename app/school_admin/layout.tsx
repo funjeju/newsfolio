@@ -36,7 +36,7 @@ export default function SchoolAdminLayout({ children }: { children: ReactNode })
     <div className="min-h-screen bg-background flex">
       <aside className="w-60 border-r bg-card/50 backdrop-blur-md hidden md:flex flex-col sticky top-0 h-screen">
         <div className="p-5 border-b">
-          <Link href="/school_admin/dashboard" className="flex items-center gap-2 font-display font-bold text-lg">
+          <Link href="/" className="flex items-center gap-2 font-display font-bold text-lg">
             <SchoolIcon className="w-5 h-5 text-brand-400" />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-300 to-purple-400">
               학교 관리자

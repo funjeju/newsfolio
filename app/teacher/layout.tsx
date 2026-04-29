@@ -35,7 +35,7 @@ export default function TeacherLayout({ children }: { children: ReactNode }) {
     <div className="min-h-screen bg-background flex">
       <aside className="w-64 border-r bg-card/50 backdrop-blur-md flex flex-col hidden md:flex z-10 sticky top-0 h-screen">
         <div className="p-6 border-b">
-          <Link href="/teacher/dashboard" className="flex items-center gap-2 font-display font-bold text-foreground text-xl">
+          <Link href="/" className="flex items-center gap-2 font-display font-bold text-foreground text-xl">
             <span>📰</span>
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-400">
               Newsfolio

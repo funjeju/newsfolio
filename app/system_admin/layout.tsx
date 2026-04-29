@@ -37,7 +37,7 @@ export default function SystemAdminLayout({ children }: { children: ReactNode })
     <div className="min-h-screen bg-background flex">
       <aside className="w-60 border-r bg-card/50 backdrop-blur-md hidden md:flex flex-col sticky top-0 h-screen">
         <div className="p-5 border-b">
-          <Link href="/system_admin/dashboard" className="flex items-center gap-2 font-display font-bold text-lg">
+          <Link href="/" className="flex items-center gap-2 font-display font-bold text-lg">
             <ShieldCheckIcon className="w-5 h-5 text-red-400" />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-400 to-orange-400">
               시스템 관리자
