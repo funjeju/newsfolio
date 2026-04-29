@@ -1,0 +1,228 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ============ HELPERS ============
+    function isAuth() { return request.auth != null; }
+    function userDoc() { return get(/databases/$(database)/documents/users/$(request.auth.uid)).data; }
+    function role() { return userDoc().role; }
+    function isSystemAdmin() { return isAuth() && role() == 'system_admin'; }
+    function isSchoolAdmin() { return isAuth() && role() == 'school_admin'; }
+    function isTeacher() { return isAuth() && role() == 'teacher'; }
+    function isStudent() { return isAuth() && role() == 'student'; }
+    function isOwnSchool(schoolId) { return userDoc().schoolId == schoolId; }
+    function isOwnClass(classId) { return userDoc().classId == classId; }
+    function teachesClass(classId) {
+      return isTeacher() && classId in userDoc().teachingClassIds;
+    }
+    function isMemberOfClass(classId) {
+      return teachesClass(classId) || isOwnClass(classId);
+    }
+
+    // ============ SCHOOLS ============
+    match /schools/{schoolId} {
+      allow read: if isAuth() && (isOwnSchool(schoolId) || isSystemAdmin());
+      allow write: if isSystemAdmin()
+        || (isSchoolAdmin() && isOwnSchool(schoolId));
+    }
+
+    // ============ USERS ============
+    match /users/{userId} {
+      allow read: if isAuth() && (
+        request.auth.uid == userId
+        || isSystemAdmin()
+        || (resource.data.classId != null && isMemberOfClass(resource.data.classId))
+      );
+      allow create: if isAuth() && request.auth.uid == userId;
+      allow update: if isAuth() && (request.auth.uid == userId || isSystemAdmin());
+      allow delete: if isSystemAdmin();
+    }
+
+    // ============ STUDENT ROSTER ============
+    match /studentRoster/{rosterId} {
+      allow read: if isAuth() && teachesClass(resource.data.classId);
+      allow write: if isAuth() && teachesClass(request.resource.data.classId);
+    }
+
+    // ============ CLASSES ============
+    match /classes/{classId} {
+      allow read: if isAuth() && (
+        isMemberOfClass(classId)
+        || (isSchoolAdmin() && isOwnSchool(resource.data.schoolId))
+        || isSystemAdmin()
+      );
+      allow create: if isAuth() && (isSchoolAdmin() || isSystemAdmin());
+      allow update: if isAuth() && (
+        teachesClass(classId)
+        || (isSchoolAdmin() && isOwnSchool(resource.data.schoolId))
+      );
+      allow delete: if isSystemAdmin();
+    }
+
+    // ============ GROUPS ============
+    match /groups/{groupId} {
+      allow read: if isAuth() && isMemberOfClass(resource.data.classId);
+      allow write: if isAuth() && teachesClass(resource.data.classId);
+    }
+
+    // ============ SEASONS ============
+    match /seasons/{seasonId} {
+      allow read: if isAuth();
+      allow write: if isSystemAdmin() || isSchoolAdmin();
+    }
+
+    // ============ SECTORS ============
+    match /sectors/{sectorId} {
+      allow read: if true;
+      allow write: if isSystemAdmin();
+    }
+
+    // ============ PUBLIC SCORES ============
+    match /publicScores/{date} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // ============ BRIEFINGS ============
+    match /briefings/{briefingId} {
+      allow read: if isAuth() && isMemberOfClass(resource.data.classId);
+      allow create, update: if isAuth() && (
+        teachesClass(resource.data.classId)
+        || isSystemAdmin()
+      );
+    }
+
+    // ============ NEWS ITEMS ============
+    match /newsItems/{newsId} {
+      allow read: if isAuth();
+      allow create: if isAuth() && (
+        request.resource.data.submittedBy == request.auth.uid
+        || isSystemAdmin()
+      );
+      allow update, delete: if isSystemAdmin();
+    }
+
+    // ============ IMPACT SCORES ============
+    match /impactScores/{scoreId} {
+      allow read: if isAuth() && isMemberOfClass(resource.data.classId);
+      allow write: if false;
+    }
+
+    // ============ OBJECTIONS ============
+    match /objections/{objectionId} {
+      allow read: if isAuth() && (
+        request.auth.uid == resource.data.studentId
+        || teachesClass(resource.data.classId)
+      );
+      allow create: if isStudent()
+        && request.auth.uid == request.resource.data.studentId
+        && isOwnClass(request.resource.data.classId);
+      allow update: if isAuth() && (
+        teachesClass(resource.data.classId)
+        || (request.auth.uid == resource.data.studentId
+            && resource.data.status == 'pending')
+      );
+    }
+
+    // ============ PORTFOLIOS ============
+    match /portfolios/{portfolioId} {
+      allow read: if isAuth() && (
+        (resource.data.ownerType == 'individual'
+          && request.auth.uid == resource.data.ownerId)
+        || (resource.data.ownerType == 'group'
+          && resource.data.ownerId in get(/databases/$(database)/documents/groups/$(resource.data.ownerId)).data.memberIds)
+        || teachesClass(resource.data.classId)
+      );
+      allow write: if false;
+
+      match /snapshots/{date} {
+        allow read: if isAuth();
+        allow write: if false;
+      }
+    }
+
+    // ============ TRANSACTIONS ============
+    match /transactions/{txId} {
+      allow read: if isAuth() && (
+        request.auth.uid == resource.data.requestedBy
+        || teachesClass(resource.data.classId)
+      );
+      allow create: if isStudent()
+        && request.auth.uid == request.resource.data.requestedBy
+        && isOwnClass(request.resource.data.classId);
+      allow update: if isAuth() && teachesClass(resource.data.classId);
+    }
+
+    // ============ RANKINGS ============
+    match /rankings/{rankingId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // ============ REPORTS ============
+    match /reports/{reportId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // ============ AWARDS ============
+    match /awards/{awardId} {
+      allow read: if isAuth() && (
+        request.auth.uid == resource.data.recipientId
+        || isMemberOfClass(resource.data.classId)
+        || (isSchoolAdmin() && isOwnSchool(resource.data.schoolId))
+      );
+      allow write: if false;
+    }
+
+    // ============ MONTHLY ANALYSES ============
+    match /monthlyAnalyses/{analysisId} {
+      allow read: if isAuth() && isMemberOfClass(resource.data.classId);
+      allow write: if false;
+    }
+
+    // ============ GLOSSARY ============
+    match /glossary/{termId} {
+      allow read: if true;
+      allow write: if isSystemAdmin();
+    }
+
+    // ============ WHITELIST DOMAINS ============
+    match /whitelistDomains/{domainId} {
+      allow read: if isAuth();
+      allow write: if isAuth() && (
+        (resource.data.scope == 'class' && teachesClass(resource.data.scopeId))
+        || (resource.data.scope == 'school'
+          && isSchoolAdmin()
+          && isOwnSchool(resource.data.scopeId))
+        || isSystemAdmin()
+      );
+    }
+
+    // ============ DOMAIN REQUESTS ============
+    match /domainRequests/{requestId} {
+      allow read: if isAuth() && (
+        request.auth.uid == resource.data.studentId
+        || teachesClass(resource.data.classId)
+      );
+      allow create: if isStudent() && isOwnClass(request.resource.data.classId);
+      allow update: if isAuth() && teachesClass(resource.data.classId);
+    }
+
+    // ============ DISCUSSION THREADS ============
+    match /discussionThreads/{threadId} {
+      allow read: if isAuth() && isMemberOfClass(resource.data.classId);
+      allow create: if isMemberOfClass(request.resource.data.classId);
+      allow update: if isAuth() && (
+        request.auth.uid == resource.data.initiatorId
+        || teachesClass(resource.data.classId)
+      );
+
+      match /replies/{replyId} {
+        allow read: if isAuth();
+        allow create: if isAuth() && request.auth.uid == request.resource.data.authorId;
+        allow update: if isAuth() && request.auth.uid == resource.data.authorId;
+      }
+    }
+  }
+}

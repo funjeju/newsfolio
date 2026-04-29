@@ -1,0 +1,110 @@
+[
+  {
+    "domain": "한국경제",
+    "url": "https://www.hankyung.com",
+    "credibilityScore": 0.88,
+    "category": "경제 신문",
+    "description": "한국경제신문 - 국내 대표 경제지",
+    "isAgeAppropriate": true,
+    "sectorTags": ["semiconductor", "automotive", "construction", "food", "global_trade"]
+  },
+  {
+    "domain": "조선비즈",
+    "url": "https://biz.chosun.com",
+    "credibilityScore": 0.85,
+    "category": "경제 신문",
+    "description": "조선일보 경제 섹션",
+    "isAgeAppropriate": true,
+    "sectorTags": ["semiconductor", "automotive", "green_energy", "game", "geopolitics"]
+  },
+  {
+    "domain": "연합뉴스",
+    "url": "https://www.yna.co.kr",
+    "credibilityScore": 0.92,
+    "category": "통신사",
+    "description": "국가 공인 뉴스 통신사",
+    "isAgeAppropriate": true,
+    "sectorTags": ["geopolitics", "global_trade", "green_energy", "semiconductor"]
+  },
+  {
+    "domain": "KBS 뉴스",
+    "url": "https://news.kbs.co.kr",
+    "credibilityScore": 0.90,
+    "category": "방송사",
+    "description": "KBS 공영방송 뉴스",
+    "isAgeAppropriate": true,
+    "sectorTags": ["geopolitics", "construction", "food", "automotive"]
+  },
+  {
+    "domain": "매일경제",
+    "url": "https://www.mk.co.kr",
+    "credibilityScore": 0.86,
+    "category": "경제 신문",
+    "description": "매일경제신문",
+    "isAgeAppropriate": true,
+    "sectorTags": ["semiconductor", "automotive", "game", "content", "green_energy"]
+  },
+  {
+    "domain": "Bloomberg",
+    "url": "https://www.bloomberg.com",
+    "credibilityScore": 0.95,
+    "category": "글로벌 경제 미디어",
+    "description": "글로벌 금융·경제 전문 미디어",
+    "isAgeAppropriate": true,
+    "sectorTags": ["semiconductor", "global_trade", "geopolitics", "automotive"]
+  },
+  {
+    "domain": "Reuters",
+    "url": "https://www.reuters.com",
+    "credibilityScore": 0.94,
+    "category": "글로벌 통신사",
+    "description": "글로벌 뉴스 통신사",
+    "isAgeAppropriate": true,
+    "sectorTags": ["geopolitics", "global_trade", "semiconductor", "green_energy"]
+  },
+  {
+    "domain": "전자신문",
+    "url": "https://www.etnews.com",
+    "credibilityScore": 0.84,
+    "category": "IT·전자 전문지",
+    "description": "IT·전자·통신 전문 신문",
+    "isAgeAppropriate": true,
+    "sectorTags": ["semiconductor", "game", "content"]
+  },
+  {
+    "domain": "Energy Economy",
+    "url": "https://www.energy-economy.co.kr",
+    "credibilityScore": 0.80,
+    "category": "에너지 전문지",
+    "description": "에너지·친환경 전문 미디어",
+    "isAgeAppropriate": true,
+    "sectorTags": ["green_energy"]
+  },
+  {
+    "domain": "서울경제",
+    "url": "https://www.sedaily.com",
+    "credibilityScore": 0.83,
+    "category": "경제 신문",
+    "description": "서울경제신문",
+    "isAgeAppropriate": true,
+    "sectorTags": ["construction", "food", "automotive", "content", "travel"]
+  },
+  {
+    "domain": "게임동아",
+    "url": "https://game.donga.com",
+    "credibilityScore": 0.78,
+    "category": "게임 전문지",
+    "description": "게임 전문 미디어",
+    "isAgeAppropriate": true,
+    "sectorTags": ["game"]
+  },
+  {
+    "domain": "Travel Biz",
+    "url": "https://www.travelbiz.co.kr",
+    "credibilityScore": 0.75,
+    "category": "여행 전문지",
+    "description": "여행·관광 산업 전문 미디어",
+    "isAgeAppropriate": true,
+    "sectorTags": ["travel"]
+  }
+]
