@@ -11,8 +11,7 @@ import { useUser } from "@/lib/hooks/useUser";
 import { cn } from "@/lib/utils";
 
 const MOCK_PORTFOLIO_HISTORY = [
-  { v: 1000000 }, { v: 1012000 }, { v: 1008000 },
-  { v: 1025000 }, { v: 1019000 }, { v: 1038000 },
+  { v: 1000000 },
 ];
 
 const MOCK_MY_SECTORS = [
@@ -34,11 +33,11 @@ const MOCK_NEWS = [
 
 export default function SoloDashboard() {
   const { user } = useUser();
-  const currentValue = 1038000;
+  const currentValue = 1000000;
   const startValue = 1000000;
-  const cumReturn = ((currentValue - startValue) / startValue) * 100;
-  const dailyReturn = 1.86;
-  const rank = 142;
+  const cumReturn = 0;
+  const dailyReturn = 0;
+  const rank = 0;
   const totalUsers = 3841;
 
   return (
@@ -81,8 +80,12 @@ export default function SoloDashboard() {
             <div className="text-sm opacity-80 flex items-center gap-1 justify-end">
               <TrophyIcon className="w-3.5 h-3.5" /> 전체 랭킹
             </div>
-            <div className="text-3xl font-display font-bold mt-1">{rank}위</div>
-            <div className="text-xs opacity-70 mt-0.5">/{totalUsers.toLocaleString()}명</div>
+            <div className="text-2xl font-display font-bold mt-1">
+              {rank > 0 ? `${rank}위` : "-"}
+            </div>
+            <div className="text-xs opacity-70 mt-0.5">
+              {rank > 0 ? `/${totalUsers.toLocaleString()}명` : "투자 후 집계"}
+            </div>
           </div>
         </div>
         <div className="mt-4 h-14 opacity-70">
