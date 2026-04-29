@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  Home, TrendingUpIcon, Trophy, Settings, LogOut, BellIcon, UserCircleIcon,
+  Home, PieChartIcon, Trophy, Settings, LogOut, BellIcon, UserCircleIcon,
 } from "lucide-react";
 import { ReactNode } from "react";
 import { signOut } from "firebase/auth";
@@ -26,9 +26,9 @@ export default function SoloLayout({ children }: { children: ReactNode }) {
   };
 
   const navLinks = [
-    { href: "/solo/dashboard",  label: "홈",        icon: Home },
-    { href: "/solo/portfolio",  label: "섹터 투자",  icon: TrendingUpIcon },
-    { href: "/solo/ranking",    label: "랭킹",       icon: Trophy },
+    { href: "/solo/dashboard",  label: "홈",         icon: Home },
+    { href: "/solo/portfolio",  label: "포트폴리오",  icon: PieChartIcon },
+    { href: "/solo/ranking",    label: "랭킹",        icon: Trophy },
   ];
 
   return (
