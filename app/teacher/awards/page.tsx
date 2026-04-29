@@ -82,7 +82,7 @@ export default function TeacherAwardsPage() {
           <h1 className="text-3xl font-display font-bold">상장 발행</h1>
           <p className="text-muted-foreground mt-1">수상자에게 PDF 상장을 발행해요</p>
         </div>
-        <div className="flex items-center gap-2 text-sm text-muted-foreground bg-white/5 border border-border/50 px-3 py-2 rounded-xl">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground bg-slate-100/70 border border-border/50 px-3 py-2 rounded-xl">
           <TrophyIcon className="w-4 h-4 text-yellow-400" />
           이번 주 발행: {MOCK_AWARDS.length}건
         </div>
@@ -122,7 +122,7 @@ export default function TeacherAwardsPage() {
                 <button
                   onClick={() => handleDownloadPDF(award)}
                   disabled={downloading === award.id}
-                  className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl text-sm font-medium transition-colors flex-shrink-0 disabled:opacity-50"
+                  className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-white/20 rounded-xl text-sm font-medium transition-colors flex-shrink-0 disabled:opacity-50"
                 >
                   <DownloadIcon className="w-4 h-4" />
                   {downloading === award.id ? "생성 중..." : "PDF"}
@@ -145,7 +145,7 @@ export default function TeacherAwardsPage() {
                   onClick={() => setSelectedType(type.id)}
                   className={cn(
                     "flex items-center gap-2 p-3 rounded-xl border text-sm font-medium transition-all text-left",
-                    selectedType === type.id ? cn("border-brand-500 bg-brand-500/20 text-brand-300") : "border-border/50 bg-white/5 hover:border-white/20"
+                    selectedType === type.id ? cn("border-brand-500 bg-brand-500/20 text-brand-300") : "border-border/50 bg-slate-100/70 hover:border-white/20"
                   )}
                 >
                   <span className="text-xl">{type.icon}</span>
@@ -163,7 +163,7 @@ export default function TeacherAwardsPage() {
               value={recipientName}
               onChange={e => setRecipientName(e.target.value)}
               placeholder="학생 이름 입력"
-              className="w-full p-3 bg-white/5 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50"
+              className="w-full p-3 bg-slate-100/70 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50"
             />
           </div>
 
@@ -182,7 +182,7 @@ export default function TeacherAwardsPage() {
               onChange={e => setReason(e.target.value)}
               rows={3}
               placeholder="수상 이유를 입력하거나 AI로 생성해요"
-              className="w-full p-3 bg-white/5 border border-border/50 rounded-xl text-sm resize-none focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
+              className="w-full p-3 bg-slate-100/70 border border-border/50 rounded-xl text-sm resize-none focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
             />
           </div>
 

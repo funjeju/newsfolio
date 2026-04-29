@@ -2,22 +2,47 @@
 
 import { useState } from "react";
 import { MOCK_SECTORS, MOCK_IMPACTS } from "@/lib/mockData";
-import { ScoreBadge } from "@/components/ui/ScoreBadge";
 import Link from "next/link";
 import {
-  ArrowRightIcon, TrendingUpIcon, BookOpenIcon, UsersIcon,
-  ExternalLinkIcon, ChevronDownIcon, ChevronUpIcon,
-  NewspaperIcon, LayoutDashboardIcon, SparklesIcon, ZapIcon,
+  ArrowRightIcon, TrendingUpIcon, TrendingDownIcon,
+  ExternalLinkIcon, LayoutDashboardIcon, SparklesIcon,
+  ZapIcon, FlameIcon, TrophyIcon, ChevronDownIcon, ChevronUpIcon,
+  NewspaperIcon,
 } from "lucide-react";
 import { useUser } from "@/lib/hooks/useUser";
 import { cn } from "@/lib/utils";
 import * as motion from "framer-motion/client";
 
-// 섹터별 참조 뉴스 (mock)
+// ── Mock Data ──────────────────────────────────────────────────
+
+const HOT_NEWS = {
+  headline: "미국 상무부, 반도체 수출 규제 완화 발표…HBM 포함",
+  summary: "미 상무부가 HBM을 포함한 첨단 반도체 수출 규제를 일부 완화한다고 발표했다. 삼성·SK하이닉스 등 국내 기업들의 수혜가 예상된다.",
+  source: "한국경제",
+  time: "오전 7:30",
+  url: "https://www.hankyung.com",
+  sectorName: "반도체",
+  sectorIcon: "💻",
+  dailyReturn: 2.34,
+  impactScore: 4,
+};
+
+const COLD_NEWS = {
+  headline: "부동산 PF 부실 5조 원 확인…중소 건설사 연쇄 위기 우려",
+  summary: "금융권에서 확인된 부동산 PF 부실 규모가 5조 원을 넘어섰다. 중소 건설사 폐업 도미노 우려가 커지며 건설 섹터 전반이 압박을 받고 있다.",
+  source: "매일경제",
+  time: "오전 8:15",
+  url: "https://www.mk.co.kr",
+  sectorName: "부동산·건설",
+  sectorIcon: "🏗️",
+  dailyReturn: -2.81,
+  impactScore: -4,
+};
+
 const SECTOR_NEWS: Record<string, { title: string; source: string; url: string; time: string }[]> = {
   semiconductor: [
-    { title: "미국 상무부, 반도체 수출 규제 완화 방침 발표…HBM 포함", source: "한국경제", url: "https://www.hankyung.com", time: "2시간 전" },
-    { title: "삼성·SK하이닉스, HBM3E 글로벌 공급 계약 잇따라 체결", source: "조선비즈", url: "https://biz.chosun.com", time: "4시간 전" },
+    { title: "미국 상무부, 반도체 수출 규제 완화…HBM 포함", source: "한국경제", url: "https://www.hankyung.com", time: "2시간 전" },
+    { title: "삼성·SK하이닉스, HBM3E 글로벌 공급 계약 체결", source: "조선비즈", url: "https://biz.chosun.com", time: "4시간 전" },
     { title: "AI 서버 수요 급증…글로벌 반도체 재고 빠르게 소진", source: "전자신문", url: "https://www.etnews.com", time: "6시간 전" },
   ],
   game: [
@@ -25,19 +50,19 @@ const SECTOR_NEWS: Record<string, { title: string; source: string; url: string; 
     { title: "크래프톤 'PUBG 모바일', 동남아 MAU 3000만 돌파", source: "연합뉴스", url: "https://www.yna.co.kr", time: "5시간 전" },
   ],
   green_energy: [
-    { title: "정부, 신재생에너지 보조금 2조 원 추가 편성…태양광·풍력 집중", source: "매일경제", url: "https://www.mk.co.kr", time: "1시간 전" },
+    { title: "정부, 신재생에너지 보조금 2조 원 추가 편성", source: "매일경제", url: "https://www.mk.co.kr", time: "1시간 전" },
     { title: "한국전력, 해상풍력 3GW 프로젝트 본격 착공", source: "에너지경제", url: "https://www.ekn.kr", time: "4시간 전" },
   ],
   automotive: [
-    { title: "현대차 전기차 유럽 판매 전월 대비 8% 증가…점유율 확대", source: "한국경제", url: "https://www.hankyung.com", time: "3시간 전" },
-    { title: "기아 EV9, 미국 SUV 시장서 호평…3분기 추가 물량 투입 예정", source: "조선비즈", url: "https://biz.chosun.com", time: "7시간 전" },
+    { title: "현대차 전기차 유럽 판매 전월 대비 8% 증가", source: "한국경제", url: "https://www.hankyung.com", time: "3시간 전" },
+    { title: "기아 EV9, 미국 SUV 시장서 호평…3분기 추가 물량 투입", source: "조선비즈", url: "https://biz.chosun.com", time: "7시간 전" },
   ],
   travel: [
-    { title: "4월 해외 출국자 전년 동기 대비 5% 증가…일본·동남아 수요 견조", source: "연합뉴스", url: "https://www.yna.co.kr", time: "2시간 전" },
+    { title: "4월 해외 출국자 전년 대비 5% 증가…일본·동남아 수요 견조", source: "연합뉴스", url: "https://www.yna.co.kr", time: "2시간 전" },
     { title: "항공권 가격 소폭 안정세…여름 성수기 예약률은 높아", source: "여행신문", url: "https://www.traveltimes.co.kr", time: "5시간 전" },
   ],
   content: [
-    { title: "넷플릭스 1분기 가입자 증가세 둔화…국내 OTT도 타격 우려", source: "매일경제", url: "https://www.mk.co.kr", time: "2시간 전" },
+    { title: "넷플릭스 1분기 가입자 증가세 둔화…국내 OTT 타격 우려", source: "매일경제", url: "https://www.mk.co.kr", time: "2시간 전" },
     { title: "티빙·웨이브 합병 논의 재개…수익성 개선 시급", source: "조선비즈", url: "https://biz.chosun.com", time: "6시간 전" },
   ],
   global_trade: [
@@ -46,12 +71,11 @@ const SECTOR_NEWS: Record<string, { title: string; source: string; url: string; 
   ],
   food: [
     { title: "시카고 밀 선물, 2주 만에 8% 급등…국내 제분 업체 비용 압박", source: "연합뉴스", url: "https://www.yna.co.kr", time: "3시간 전" },
-    { title: "설탕 국제 가격 3년래 최고치…국내 식품 업체 원가 부담 가중", source: "식품음료신문", url: "https://www.thinkfood.co.kr", time: "5시간 전" },
+    { title: "설탕 국제 가격 3년래 최고치…식품 업체 원가 부담 가중", source: "식품음료신문", url: "https://www.thinkfood.co.kr", time: "5시간 전" },
   ],
   geopolitics: [
     { title: "미·중 무역 협상 결렬…상호 관세 추가 부과 임박", source: "연합뉴스", url: "https://www.yna.co.kr", time: "1시간 전" },
-    { title: "중동 긴장 고조, 유가 배럴당 90달러 돌파 가능성 제기", source: "한국경제", url: "https://www.hankyung.com", time: "3시간 전" },
-    { title: "한·미·일 3국 안보 협력 강화 회의…시장 불확실성 지속", source: "매일경제", url: "https://www.mk.co.kr", time: "5시간 전" },
+    { title: "중동 긴장 고조, 유가 배럴당 90달러 돌파 가능성", source: "한국경제", url: "https://www.hankyung.com", time: "3시간 전" },
   ],
   construction: [
     { title: "부동산 PF 부실 5조 원 규모 확인…금융권 충당금 적립 압박", source: "한국경제", url: "https://www.hankyung.com", time: "2시간 전" },
@@ -60,60 +84,58 @@ const SECTOR_NEWS: Record<string, { title: string; source: string; url: string; 
   ],
 };
 
-const SCORE_COLOR = (score: number) => {
-  if (score >= 3) return "text-emerald-400";
-  if (score >= 1) return "text-emerald-300";
-  if (score === 0) return "text-slate-400";
-  if (score >= -2) return "text-red-300";
-  return "text-red-500";
-};
+const MOCK_RANKING = [
+  { rank: 1,  name: "투●●",  portfolio: 1_182_000, cumReturn: 18.2,  today: 2.4,  sectors: ["반도체", "방산"] },
+  { rank: 2,  name: "김●●",  portfolio: 1_153_000, cumReturn: 15.3,  today: 1.8,  sectors: ["방산", "에너지"] },
+  { rank: 3,  name: "이●●",  portfolio: 1_141_000, cumReturn: 14.1,  today: 1.1,  sectors: ["반도체"] },
+  { rank: 4,  name: "박●●",  portfolio: 1_120_000, cumReturn: 12.0,  today: 0.9,  sectors: ["바이오", "에너지"] },
+  { rank: 5,  name: "정●●",  portfolio: 1_098_000, cumReturn: 9.8,   today: -0.2, sectors: ["금융"] },
+  { rank: 6,  name: "최●●",  portfolio: 1_087_000, cumReturn: 8.7,   today: 0.5,  sectors: ["반도체", "자동차"] },
+  { rank: 7,  name: "강●●",  portfolio: 1_075_000, cumReturn: 7.5,   today: 1.2,  sectors: ["방산"] },
+  { rank: 8,  name: "조●●",  portfolio: 1_063_000, cumReturn: 6.3,   today: -0.8, sectors: ["바이오"] },
+  { rank: 9,  name: "윤●●",  portfolio: 1_051_000, cumReturn: 5.1,   today: 0.3,  sectors: ["금융"] },
+  { rank: 10, name: "장●●",  portfolio: 1_039_000, cumReturn: 3.9,   today: 0.7,  sectors: ["식품"] },
+];
 
-const RETURN_COLOR = (r: number) =>
-  r > 0 ? "text-emerald-400" : r < 0 ? "text-red-400" : "text-slate-400";
-
+// ── Main Component ─────────────────────────────────────────────
 export default function PublicLeaderboardPage() {
   const { user, isLoading } = useUser();
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const sorted = [...MOCK_IMPACTS].sort((a, b) => b.dailyReturn - a.dailyReturn);
-  const dashboardHref = user?.role === "teacher" ? "/teacher/dashboard" : "/student/dashboard";
+  const top3 = sorted.slice(0, 3);
+  const dashboardHref =
+    user?.role === "teacher" ? "/teacher/dashboard" :
+    user?.role === "solo" ? "/solo/dashboard" :
+    "/student/dashboard";
 
   return (
     <div className="min-h-screen bg-background">
+
       {/* ── 헤더 ── */}
-      <header className="border-b border-border/50 bg-background/80 backdrop-blur-md sticky top-0 z-10">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+      <header className="border-b border-slate-200 bg-white/90 backdrop-blur-md sticky top-0 z-20 shadow-sm">
+        <div className="max-w-6xl mx-auto px-4 py-3.5 flex items-center justify-between">
           <div className="flex items-center gap-2 font-display font-bold text-xl">
             <span>📰</span>
-            <span className="bg-gradient-to-r from-brand-400 to-purple-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
               Newsfolio
             </span>
           </div>
-
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
             {!isLoading && user ? (
-              // 로그인 상태
               <Link
                 href={dashboardHref}
-                className="flex items-center gap-2 px-4 py-2 bg-brand-500 text-white rounded-xl text-sm font-bold hover:bg-brand-600 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 transition-colors shadow-sm"
               >
                 <LayoutDashboardIcon className="w-4 h-4" />
-                내 대시보드
-                <ArrowRightIcon className="w-3.5 h-3.5" />
+                내 대시보드 <ArrowRightIcon className="w-3.5 h-3.5" />
               </Link>
             ) : (
-              // 비로그인 상태
               <>
-                <Link
-                  href="/login"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors font-medium"
-                >
+                <Link href="/login" className="text-sm text-slate-500 hover:text-slate-800 font-medium">
                   로그인
                 </Link>
-                <Link
-                  href="/join"
-                  className="text-sm px-4 py-2 bg-brand-500 text-white rounded-xl font-bold hover:bg-brand-600 transition-colors"
-                >
+                <Link href="/join" className="text-sm px-4 py-2 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition-colors">
                   시작하기
                 </Link>
               </>
@@ -122,250 +144,333 @@ export default function PublicLeaderboardPage() {
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 py-10 space-y-12">
-        {/* ── 히어로 ── */}
-        <section className="text-center space-y-5 pt-4">
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 text-xs font-bold text-brand-400 bg-brand-500/10 border border-brand-500/20 px-3 py-1.5 rounded-full"
-          >
-            <SparklesIcon className="w-3.5 h-3.5" />
-            오늘의 AI 경제 분석 공개 중
-          </motion.div>
+      <main className="max-w-6xl mx-auto px-4 py-8 space-y-6">
 
+        {/* ── 히어로 타이틀 ── */}
+        <section className="text-center space-y-3 pt-2">
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center gap-2 text-xs font-bold text-indigo-600 bg-indigo-50 border border-indigo-200 px-3 py-1.5 rounded-full"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+            2026년 4월 29일 · AI 분석 완료
+          </motion.div>
           <motion.h1
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="text-4xl md:text-5xl font-display font-bold leading-tight"
+            className="text-3xl md:text-4xl font-display font-bold"
           >
-            뉴스로 배우는<br />
-            <span className="bg-gradient-to-r from-brand-400 to-purple-400 bg-clip-text text-transparent">
-              경제 시뮬레이션
+            오늘 어떤 뉴스가{" "}
+            <span className="bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
+              경제를 움직였나요?
             </span>
           </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.1 }}
-            className="text-muted-foreground text-lg max-w-xl mx-auto leading-relaxed"
-          >
-            AI가 어제 뉴스를 분석해 섹터별 영향도를 매일 아침 점수로 알려줘요.<br />
-            선생님과 함께하면 직접 이의제기하고 포트폴리오도 운영할 수 있어요!
-          </motion.p>
-
-          {!isLoading && !user && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.15 }}
-              className="flex items-center justify-center gap-3 flex-wrap"
-            >
-              <Link
-                href="/join"
-                className="flex items-center gap-2 px-6 py-3 bg-brand-500 text-white rounded-2xl font-bold hover:bg-brand-600 transition-colors shadow-[0_4px_20px_rgba(99,102,241,0.4)]"
-              >
-                학급 코드로 참여하기 <ArrowRightIcon className="w-4 h-4" />
-              </Link>
-              <Link
-                href="/login"
-                className="flex items-center gap-2 px-6 py-3 bg-white/5 border border-border/50 rounded-2xl font-medium hover:bg-white/10 transition-colors"
-              >
-                로그인
-              </Link>
-            </motion.div>
-          )}
         </section>
 
-        {/* ── 섹터 리더보드 ── */}
-        <section className="glass rounded-3xl border border-border/50 overflow-hidden">
-          {/* 헤더 */}
-          <div className="p-5 border-b border-border/50 flex items-center justify-between">
-            <div>
-              <h2 className="text-xl font-display font-bold flex items-center gap-2">
-                <ZapIcon className="w-5 h-5 text-yellow-400" />
-                오늘의 섹터 순위
-              </h2>
-              <p className="text-sm text-muted-foreground mt-0.5">
-                AI가 분석한 어제 뉴스 영향도 · 매일 오전 6시 업데이트
-              </p>
-            </div>
-            <span className="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-1 rounded-full font-bold animate-pulse">
-              LIVE
-            </span>
+        {/* ── TOP 3 상승 섹터 ── */}
+        <section className="space-y-2.5">
+          <div className="flex items-center gap-2 px-1">
+            <TrendingUpIcon className="w-4 h-4 text-emerald-600" />
+            <h2 className="text-sm font-bold text-slate-600 uppercase tracking-wide">🚀 오늘 TOP 3 상승 섹터</h2>
           </div>
-
-          {/* 테이블 헤더 */}
-          <div className="hidden md:grid grid-cols-[2.5rem_1fr_8rem_6rem_9rem] gap-4 px-6 py-2.5 bg-white/5 border-b border-border/30 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-            <div className="text-center">#</div>
-            <div>섹터</div>
-            <div className="text-center">AI 영향도</div>
-            <div className="text-right">등락률</div>
-            <div className="text-center">뉴스 근거</div>
-          </div>
-
-          <div className="divide-y divide-border/20">
-            {sorted.map((impact, i) => {
+          <div className="grid grid-cols-3 gap-3">
+            {top3.map((impact, i) => {
               const sector = MOCK_SECTORS.find(s => s.id === impact.sectorId)!;
-              const news = SECTOR_NEWS[impact.sectorId] ?? [];
-              const isExpanded = expandedId === impact.sectorId;
-              const rankChange = impact.rankChange;
-
+              const medals = ["🥇", "🥈", "🥉"];
               return (
                 <motion.div
                   key={sector.id}
-                  initial={{ opacity: 0, x: -8 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.04 }}
-                >
-                  {/* 섹터 행 */}
-                  <div className="grid grid-cols-[2.5rem_1fr_auto] md:grid-cols-[2.5rem_1fr_8rem_6rem_9rem] gap-3 md:gap-4 px-4 md:px-6 py-4 items-center hover:bg-white/5 transition-colors">
-                    {/* 순위 */}
-                    <div className="text-center text-lg font-bold">
-                      {i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : (
-                        <span className="text-sm text-muted-foreground">{i + 1}</span>
-                      )}
-                    </div>
-
-                    {/* 섹터명 + AI 요약 */}
-                    <div className="flex items-center gap-3 min-w-0">
-                      <span className="text-2xl shrink-0">{sector.icon}</span>
-                      <div className="min-w-0">
-                        <div className="font-bold flex items-center gap-2">
-                          {sector.name}
-                          {rankChange !== 0 && (
-                            <span className={cn("text-xs font-semibold", rankChange > 0 ? "text-emerald-400" : "text-red-400")}>
-                              {rankChange > 0 ? `▲${rankChange}` : `▼${Math.abs(rankChange)}`}
-                            </span>
-                          )}
-                        </div>
-                        <div className="text-xs text-muted-foreground truncate max-w-xs mt-0.5">
-                          {impact.rationaleSummary}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* AI 영향도 뱃지 */}
-                    <div className="hidden md:flex justify-center">
-                      <ScoreBadge score={impact.impactScore} />
-                    </div>
-
-                    {/* 등락률 */}
-                    <div className={cn("hidden md:block text-right font-mono font-bold text-sm", RETURN_COLOR(impact.dailyReturn))}>
-                      {impact.dailyReturn > 0 ? "+" : ""}{impact.dailyReturn.toFixed(2)}%
-                    </div>
-
-                    {/* 뉴스 보기 버튼 */}
-                    <div className="flex items-center justify-end md:justify-center">
-                      <button
-                        onClick={() => setExpandedId(isExpanded ? null : impact.sectorId)}
-                        className={cn(
-                          "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors",
-                          isExpanded
-                            ? "bg-brand-500/20 text-brand-300 border border-brand-500/30"
-                            : "bg-white/5 text-muted-foreground hover:bg-white/10 hover:text-foreground border border-border/40"
-                        )}
-                      >
-                        <NewspaperIcon className="w-3.5 h-3.5" />
-                        <span className="hidden sm:inline">뉴스 {news.length}건</span>
-                        {isExpanded
-                          ? <ChevronUpIcon className="w-3.5 h-3.5" />
-                          : <ChevronDownIcon className="w-3.5 h-3.5" />
-                        }
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* 뉴스 펼침 */}
-                  {isExpanded && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="px-4 md:px-6 pb-4 bg-white/3 border-t border-border/20"
-                    >
-                      <p className="text-xs text-muted-foreground pt-3 pb-2 flex items-center gap-1.5">
-                        <SparklesIcon className="w-3 h-3 text-brand-400" />
-                        AI가 이 뉴스들을 참조해 점수를 산정했어요
-                      </p>
-                      <div className="space-y-2">
-                        {news.map((item, ni) => (
-                          <a
-                            key={ni}
-                            href={item.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-start justify-between gap-3 p-3 rounded-xl bg-white/5 border border-border/30 hover:bg-white/10 hover:border-brand-500/30 transition-colors group"
-                          >
-                            <div className="min-w-0">
-                              <p className="text-sm font-medium leading-snug group-hover:text-brand-300 transition-colors line-clamp-2">
-                                {item.title}
-                              </p>
-                              <div className="flex items-center gap-2 mt-1.5">
-                                <span className="text-xs text-brand-400 font-semibold">{item.source}</span>
-                                <span className="text-xs text-muted-foreground">·</span>
-                                <span className="text-xs text-muted-foreground">{item.time}</span>
-                              </div>
-                            </div>
-                            <ExternalLinkIcon className="w-4 h-4 text-muted-foreground group-hover:text-brand-400 transition-colors shrink-0 mt-0.5" />
-                          </a>
-                        ))}
-                      </div>
-                    </motion.div>
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.07 }}
+                  className={cn(
+                    "relative rounded-2xl p-4 overflow-hidden border",
+                    i === 0
+                      ? "bg-gradient-to-br from-emerald-500 to-teal-600 border-emerald-400 text-white"
+                      : i === 1
+                      ? "bg-gradient-to-br from-emerald-400 to-emerald-500 border-emerald-300 text-white"
+                      : "bg-gradient-to-br from-teal-400 to-emerald-400 border-teal-300 text-white"
                   )}
+                >
+                  <div className="absolute top-2 right-3 text-2xl opacity-80">{sector.icon}</div>
+                  <div className="text-xs font-bold opacity-80 mb-1">{medals[i]} {i + 1}위</div>
+                  <div className="font-bold text-base md:text-lg leading-tight">{sector.name}</div>
+                  <div className="text-2xl md:text-3xl font-display font-bold mt-1">
+                    +{impact.dailyReturn.toFixed(2)}%
+                  </div>
+                  <div className="text-xs opacity-70 mt-0.5 line-clamp-1 hidden sm:block">
+                    {impact.rationaleSummary}
+                  </div>
                 </motion.div>
               );
             })}
           </div>
-
-          <div className="px-6 py-4 bg-white/5 border-t border-border/30 text-xs text-muted-foreground text-center">
-            {user
-              ? <span>📊 포트폴리오에서 내 섹터 성과를 확인해보세요 · <Link href={dashboardHref} className="text-brand-400 hover:underline">대시보드 바로가기 →</Link></span>
-              : <span>🎓 전체 기능은 학급 코드로 참여하면 이용할 수 있어요 · <Link href="/join" className="text-brand-400 hover:underline">지금 참여하기 →</Link></span>
-            }
-          </div>
         </section>
 
-        {/* ── 피처 카드 ── */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {[
-            {
-              icon: <TrendingUpIcon className="w-6 h-6 text-brand-400" />,
-              title: "AI 뉴스 분석",
-              desc: "매일 오전 AI가 뉴스를 분석해 섹터별 영향도를 점수로 알려줘요. 어떤 뉴스가 왜 이 점수인지도 확인할 수 있어요.",
-            },
-            {
-              icon: <BookOpenIcon className="w-6 h-6 text-purple-400" />,
-              title: "이의제기로 배우기",
-              desc: "AI 판단에 동의하지 않으면 뉴스 근거를 찾아 직접 이의제기할 수 있어요. 논리가 맞으면 점수가 바뀌어요!",
-            },
-            {
-              icon: <UsersIcon className="w-6 h-6 text-emerald-400" />,
-              title: "조별 포트폴리오",
-              desc: "팀원들과 함께 섹터를 선택하고 포트폴리오를 운영해요. 누가 가장 정확히 예측하는지 겨뤄봐요.",
-            },
-          ].map((f, i) => (
-            <motion.div
-              key={f.title}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 + i * 0.08 }}
-              className="glass p-6 rounded-2xl border border-border/50 space-y-3 hover:border-brand-500/30 transition-colors"
-            >
-              {f.icon}
-              <h3 className="font-bold text-lg">{f.title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
-            </motion.div>
-          ))}
-        </section>
+        {/* ── 메인 그리드: 강력한 한방 + 섹터 전체 순위 ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
 
-        <footer className="text-center text-xs text-muted-foreground pb-8">
-          © 2026 Newsfolio · 선생님 문의:{" "}
-          <Link href="/login" className="text-brand-400 hover:underline">
-            교사 계정으로 시작하기
-          </Link>
+          {/* 오늘의 강력한 한방 (상승) */}
+          <motion.div
+            initial={{ opacity: 0, x: -12 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.1 }}
+            className="lg:col-span-3 rounded-2xl overflow-hidden border border-amber-200 shadow-md"
+          >
+            {/* 카드 헤더 */}
+            <div className="bg-gradient-to-r from-amber-400 to-orange-500 px-5 py-3 flex items-center justify-between">
+              <div className="flex items-center gap-2 text-white font-bold">
+                <FlameIcon className="w-5 h-5" />
+                오늘의 강력한 한방 🔥
+              </div>
+              <span className="text-xs bg-white/20 text-white px-2 py-0.5 rounded-full font-bold">
+                {HOT_NEWS.sectorIcon} {HOT_NEWS.sectorName}
+              </span>
+            </div>
+            {/* 카드 본문 */}
+            <div className="bg-white p-5 space-y-3">
+              <div className="flex items-start justify-between gap-3">
+                <h3 className="font-bold text-slate-800 text-base md:text-lg leading-snug flex-1">
+                  {HOT_NEWS.headline}
+                </h3>
+                <span className="text-2xl font-display font-bold text-emerald-600 whitespace-nowrap flex-shrink-0">
+                  +{HOT_NEWS.dailyReturn.toFixed(2)}%
+                </span>
+              </div>
+              <p className="text-sm text-slate-500 leading-relaxed">{HOT_NEWS.summary}</p>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-xs text-slate-400">
+                  <span className="font-semibold text-indigo-600">{HOT_NEWS.source}</span>
+                  <span>·</span>
+                  <span>{HOT_NEWS.time}</span>
+                </div>
+                <a
+                  href={HOT_NEWS.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1 text-xs font-bold text-amber-600 hover:text-amber-800 transition-colors"
+                >
+                  뉴스 보기 <ExternalLinkIcon className="w-3 h-3" />
+                </a>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* 섹터 전체 순위 (compact) */}
+          <motion.div
+            initial={{ opacity: 0, x: 12 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.12 }}
+            className="lg:col-span-2 bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm"
+          >
+            <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
+              <h3 className="font-bold text-slate-700 text-sm flex items-center gap-1.5">
+                <ZapIcon className="w-4 h-4 text-indigo-500" />
+                오늘의 섹터 순위
+              </h3>
+              <span className="text-[10px] font-bold bg-green-100 text-green-700 px-2 py-0.5 rounded-full flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                LIVE
+              </span>
+            </div>
+            <div className="divide-y divide-slate-50">
+              {sorted.map((impact, i) => {
+                const sector = MOCK_SECTORS.find(s => s.id === impact.sectorId)!;
+                const isUp = impact.dailyReturn > 0;
+                const news = SECTOR_NEWS[impact.sectorId] ?? [];
+                const isExp = expandedId === impact.sectorId;
+                return (
+                  <div key={sector.id}>
+                    <button
+                      onClick={() => setExpandedId(isExp ? null : impact.sectorId)}
+                      className="w-full flex items-center gap-2.5 px-4 py-2.5 hover:bg-slate-50 transition-colors text-left"
+                    >
+                      <span className="text-sm font-bold text-slate-400 w-4 text-center flex-shrink-0">
+                        {i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : i + 1}
+                      </span>
+                      <span className="text-base">{sector.icon}</span>
+                      <span className="text-sm font-semibold text-slate-700 flex-1 truncate">{sector.name}</span>
+                      <span className={cn(
+                        "text-sm font-bold font-mono flex-shrink-0",
+                        isUp ? "text-emerald-600" : impact.dailyReturn < 0 ? "text-red-500" : "text-slate-400"
+                      )}>
+                        {isUp ? "+" : ""}{impact.dailyReturn.toFixed(2)}%
+                      </span>
+                      {news.length > 0 && (
+                        isExp
+                          ? <ChevronUpIcon className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
+                          : <ChevronDownIcon className="w-3.5 h-3.5 text-slate-300 flex-shrink-0" />
+                      )}
+                    </button>
+                    {isExp && news.length > 0 && (
+                      <div className="px-4 pb-3 space-y-1.5 bg-slate-50">
+                        {news.slice(0, 2).map((n, ni) => (
+                          <a
+                            key={ni}
+                            href={n.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 text-xs text-slate-600 hover:text-indigo-600 transition-colors"
+                          >
+                            <NewspaperIcon className="w-3 h-3 flex-shrink-0 text-slate-400" />
+                            <span className="line-clamp-1">{n.title}</span>
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </motion.div>
+        </div>
+
+        {/* ── 아래로 한방 + 수익률 랭킹 ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+
+          {/* 오늘의 아래로 한방 (하락) */}
+          <motion.div
+            initial={{ opacity: 0, x: -12 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.18 }}
+            className="lg:col-span-3 rounded-2xl overflow-hidden border border-rose-200 shadow-md"
+          >
+            <div className="bg-gradient-to-r from-rose-500 to-red-600 px-5 py-3 flex items-center justify-between">
+              <div className="flex items-center gap-2 text-white font-bold">
+                <TrendingDownIcon className="w-5 h-5" />
+                오늘의 아래로 한방 💥
+              </div>
+              <span className="text-xs bg-white/20 text-white px-2 py-0.5 rounded-full font-bold">
+                {COLD_NEWS.sectorIcon} {COLD_NEWS.sectorName}
+              </span>
+            </div>
+            <div className="bg-white p-5 space-y-3">
+              <div className="flex items-start justify-between gap-3">
+                <h3 className="font-bold text-slate-800 text-base md:text-lg leading-snug flex-1">
+                  {COLD_NEWS.headline}
+                </h3>
+                <span className="text-2xl font-display font-bold text-red-500 whitespace-nowrap flex-shrink-0">
+                  {COLD_NEWS.dailyReturn.toFixed(2)}%
+                </span>
+              </div>
+              <p className="text-sm text-slate-500 leading-relaxed">{COLD_NEWS.summary}</p>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-xs text-slate-400">
+                  <span className="font-semibold text-indigo-600">{COLD_NEWS.source}</span>
+                  <span>·</span>
+                  <span>{COLD_NEWS.time}</span>
+                </div>
+                <a
+                  href={COLD_NEWS.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1 text-xs font-bold text-rose-600 hover:text-rose-800 transition-colors"
+                >
+                  뉴스 보기 <ExternalLinkIcon className="w-3 h-3" />
+                </a>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* 수익률 랭킹 TOP10 */}
+          <motion.div
+            initial={{ opacity: 0, x: 12 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+            className="lg:col-span-2 bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm"
+          >
+            <div className="bg-gradient-to-r from-indigo-600 to-violet-600 px-4 py-3">
+              <div className="flex items-center justify-between">
+                <h3 className="font-bold text-white flex items-center gap-1.5 text-sm">
+                  <TrophyIcon className="w-4 h-4" />
+                  오늘의 수익률 랭킹
+                </h3>
+                <span className="text-[10px] text-white/70">전체 참여자 {(3841).toLocaleString()}명</span>
+              </div>
+            </div>
+            <div className="divide-y divide-slate-50">
+              {MOCK_RANKING.map((entry) => {
+                const medals: Record<number, string> = { 1: "🥇", 2: "🥈", 3: "🥉" };
+                const isTop = entry.rank <= 3;
+                return (
+                  <div
+                    key={entry.rank}
+                    className={cn(
+                      "flex items-center gap-3 px-4 py-2.5",
+                      isTop ? "bg-indigo-50/60" : "hover:bg-slate-50"
+                    )}
+                  >
+                    <div className="w-6 text-center flex-shrink-0">
+                      {medals[entry.rank] ?? (
+                        <span className="text-xs font-bold text-slate-400">{entry.rank}</span>
+                      )}
+                    </div>
+                    {/* 이름 블러 */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-sm font-bold text-slate-800">{entry.name}</span>
+                        <span className="text-[10px] text-slate-400 truncate hidden sm:inline">
+                          {entry.sectors.slice(0, 2).join("·")}
+                        </span>
+                      </div>
+                      <div className="text-xs text-slate-400">{entry.portfolio.toLocaleString()}원</div>
+                    </div>
+                    <div className="text-right flex-shrink-0">
+                      <div className={cn(
+                        "text-sm font-bold",
+                        entry.cumReturn >= 0 ? "text-emerald-600" : "text-red-500"
+                      )}>
+                        +{entry.cumReturn.toFixed(1)}%
+                      </div>
+                      <div className={cn(
+                        "text-[10px] font-medium",
+                        entry.today >= 0 ? "text-emerald-500" : "text-red-400"
+                      )}>
+                        오늘 {entry.today >= 0 ? "+" : ""}{entry.today.toFixed(2)}%
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="px-4 py-3 border-t border-slate-100 text-center">
+              <Link href="/join" className="text-xs text-indigo-600 font-bold hover:underline">
+                랭킹에 참여하기 →
+              </Link>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* ── 참여 CTA (비로그인) ── */}
+        {!isLoading && !user && (
+          <motion.section
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25 }}
+            className="bg-gradient-to-r from-indigo-600 to-violet-600 rounded-2xl p-6 text-white text-center space-y-4"
+          >
+            <div className="text-2xl font-display font-bold">
+              직접 참여해서 포트폴리오를 운영해보세요 🚀
+            </div>
+            <p className="text-white/80 text-sm">
+              AI 분석에 이의제기하고, 팀원들과 섹터를 선택해서 누가 가장 정확히 예측하는지 겨뤄봐요.
+            </p>
+            <div className="flex items-center justify-center gap-3 flex-wrap">
+              <Link href="/join" className="flex items-center gap-2 px-6 py-3 bg-white text-indigo-700 rounded-xl font-bold hover:bg-indigo-50 transition-colors shadow-sm">
+                학급 코드로 참여하기 <ArrowRightIcon className="w-4 h-4" />
+              </Link>
+              <Link href="/join" className="flex items-center gap-2 px-5 py-3 bg-white/20 rounded-xl font-semibold hover:bg-white/30 transition-colors text-sm">
+                혼자 참여하기
+              </Link>
+            </div>
+          </motion.section>
+        )}
+
+        <footer className="text-center text-xs text-slate-400 pb-6 pt-2">
+          © 2026 Newsfolio · 이름은 개인정보 보호를 위해 블러 처리됩니다 ·{" "}
+          <Link href="/login" className="text-indigo-500 hover:underline">교사 계정으로 시작하기</Link>
         </footer>
       </main>
     </div>

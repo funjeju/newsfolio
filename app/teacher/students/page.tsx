@@ -63,7 +63,7 @@ const METRIC_LABELS: Record<string, string> = {
 function MetricBar({ value, max = 100 }: { value: number; max?: number }) {
   const pct = (value / max) * 100;
   return (
-    <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+    <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
       <div
         className={cn(
           "h-full rounded-full transition-all",
@@ -103,7 +103,7 @@ export default function TeacherStudentsPage() {
 
       {/* Controls */}
       <div className="flex flex-col sm:flex-row gap-3">
-        <div className="flex-1 flex items-center gap-2 bg-white/5 border border-border/50 rounded-xl px-3 py-2.5">
+        <div className="flex-1 flex items-center gap-2 bg-slate-100/70 border border-border/50 rounded-xl px-3 py-2.5">
           <SearchIcon className="w-4 h-4 text-muted-foreground" />
           <input
             type="text"
@@ -113,7 +113,7 @@ export default function TeacherStudentsPage() {
             className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground/50"
           />
         </div>
-        <div className="flex gap-1 p-1 bg-white/5 rounded-xl border border-border/50">
+        <div className="flex gap-1 p-1 bg-slate-100/70 rounded-xl border border-border/50">
           {([["rank", "순위순"], ["activity", "활동순"], ["name", "이름순"]] as const).map(([v, label]) => (
             <button
               key={v}
@@ -148,7 +148,7 @@ export default function TeacherStudentsPage() {
               {/* Row */}
               <button
                 onClick={() => setExpandedId(isExpanded ? null : student.id)}
-                className="w-full flex items-center gap-4 p-4 text-left hover:bg-white/5 transition-colors"
+                className="w-full flex items-center gap-4 p-4 text-left hover:bg-slate-100/70 transition-colors"
               >
                 {/* Rank */}
                 <div className="w-8 text-center font-bold text-lg flex-shrink-0">
@@ -162,7 +162,7 @@ export default function TeacherStudentsPage() {
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="font-bold">{student.name}</span>
                     <span className="text-xs text-muted-foreground">{student.studentNumber}번</span>
-                    <span className="text-xs bg-white/10 px-1.5 py-0.5 rounded">{student.groupName}</span>
+                    <span className="text-xs bg-slate-100 px-1.5 py-0.5 rounded">{student.groupName}</span>
                     <span className="text-xs text-brand-400">{student.role}</span>
                   </div>
                   <div className="mt-1.5">

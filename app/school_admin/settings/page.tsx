@@ -70,7 +70,7 @@ export default function SchoolAdminSettingsPage() {
             <input
               value={settings.schoolName}
               onChange={e => update("schoolName", e.target.value)}
-              className="w-full p-2.5 bg-white/5 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50"
+              className="w-full p-2.5 bg-slate-100/70 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50"
             />
           </div>
           <div>
@@ -79,7 +79,7 @@ export default function SchoolAdminSettingsPage() {
               type="email"
               value={settings.adminEmail}
               onChange={e => update("adminEmail", e.target.value)}
-              className="w-full p-2.5 bg-white/5 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50"
+              className="w-full p-2.5 bg-slate-100/70 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50"
             />
           </div>
         </div>
@@ -95,7 +95,7 @@ export default function SchoolAdminSettingsPage() {
               type="date"
               value={settings.seasonStartDate}
               onChange={e => update("seasonStartDate", e.target.value)}
-              className="w-full p-2.5 bg-white/5 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50"
+              className="w-full p-2.5 bg-slate-100/70 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50"
             />
           </div>
           <div>
@@ -104,7 +104,7 @@ export default function SchoolAdminSettingsPage() {
               type="date"
               value={settings.seasonEndDate}
               onChange={e => update("seasonEndDate", e.target.value)}
-              className="w-full p-2.5 bg-white/5 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50"
+              className="w-full p-2.5 bg-slate-100/70 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50"
             />
           </div>
         </div>
@@ -167,7 +167,7 @@ export default function SchoolAdminSettingsPage() {
         </button>
         <button
           onClick={handleReset}
-          className="px-5 flex items-center gap-2 py-3 bg-white/5 border border-border/50 rounded-2xl text-sm font-semibold hover:bg-white/10 transition-colors"
+          className="px-5 flex items-center gap-2 py-3 bg-slate-100/70 border border-border/50 rounded-2xl text-sm font-semibold hover:bg-slate-100 transition-colors"
         >
           <RefreshCwIcon className="w-4 h-4" />
           초기화

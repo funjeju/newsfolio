@@ -60,7 +60,7 @@ export default function SystemAdminLayout({ children }: { children: ReactNode })
                   "flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-all text-sm",
                   isActive
                     ? "bg-red-500/20 text-red-300 border border-red-500/20"
-                    : "text-muted-foreground hover:bg-white/5 hover:text-foreground"
+                    : "text-muted-foreground hover:bg-slate-100/70 hover:text-foreground"
                 )}
               >
                 <Icon className="w-4 h-4" />

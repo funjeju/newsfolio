@@ -33,7 +33,7 @@ const MOCK_SCHOOLS: MockSchool[] = [
 const STATUS_STYLE = {
   active:   { label: "정식 운영", color: "text-score-up bg-score-up/10" },
   trial:    { label: "체험판",    color: "text-yellow-400 bg-yellow-500/10" },
-  inactive: { label: "미활성",    color: "text-muted-foreground bg-white/5" },
+  inactive: { label: "미활성",    color: "text-muted-foreground bg-slate-100/70" },
 };
 
 export default function SystemAdminSchoolsPage() {
@@ -94,13 +94,13 @@ export default function SystemAdminSchoolsPage() {
               value={newName}
               onChange={e => setNewName(e.target.value)}
               placeholder="학교 이름"
-              className="p-3 bg-white/5 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-red-500/50 placeholder:text-muted-foreground/50"
+              className="p-3 bg-slate-100/70 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-red-500/50 placeholder:text-muted-foreground/50"
             />
             <input
               value={newAddress}
               onChange={e => setNewAddress(e.target.value)}
               placeholder="주소 (예: 서울시 강남구)"
-              className="p-3 bg-white/5 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-red-500/50 placeholder:text-muted-foreground/50"
+              className="p-3 bg-slate-100/70 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-red-500/50 placeholder:text-muted-foreground/50"
             />
           </div>
           <div className="flex gap-2">
@@ -113,7 +113,7 @@ export default function SystemAdminSchoolsPage() {
             </button>
             <button
               onClick={() => setShowNew(false)}
-              className="px-4 py-2.5 bg-white/5 rounded-xl text-sm font-semibold hover:bg-white/10 transition-colors"
+              className="px-4 py-2.5 bg-slate-100/70 rounded-xl text-sm font-semibold hover:bg-slate-100 transition-colors"
             >
               취소
             </button>
@@ -128,7 +128,7 @@ export default function SystemAdminSchoolsPage() {
           value={search}
           onChange={e => setSearch(e.target.value)}
           placeholder="학교 이름 또는 지역으로 검색"
-          className="w-full pl-10 pr-4 py-3 bg-white/5 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
+          className="w-full pl-10 pr-4 py-3 bg-slate-100/70 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
         />
       </div>
 
@@ -155,21 +155,21 @@ export default function SystemAdminSchoolsPage() {
               </div>
 
               <div className="grid grid-cols-4 gap-2 text-center">
-                <div className="bg-white/5 rounded-xl p-2">
+                <div className="bg-slate-100/70 rounded-xl p-2">
                   <p className="text-sm font-bold">{school.teacherCount}</p>
                   <p className="text-[10px] text-muted-foreground">교사</p>
                 </div>
-                <div className="bg-white/5 rounded-xl p-2">
+                <div className="bg-slate-100/70 rounded-xl p-2">
                   <p className="text-sm font-bold">{school.studentCount.toLocaleString()}</p>
                   <p className="text-[10px] text-muted-foreground">학생</p>
                 </div>
-                <div className="bg-white/5 rounded-xl p-2 col-span-2">
+                <div className="bg-slate-100/70 rounded-xl p-2 col-span-2">
                   <p className="text-sm font-bold">{school.activeClasses}개 반</p>
                   <p className="text-[10px] text-muted-foreground">활성 반</p>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between bg-white/5 rounded-xl p-3">
+              <div className="flex items-center justify-between bg-slate-100/70 rounded-xl p-3">
                 <div>
                   <p className="text-[10px] text-muted-foreground mb-0.5">학교 코드</p>
                   <p className="font-mono font-bold text-sm tracking-widest">{school.schoolCode}</p>
@@ -177,7 +177,7 @@ export default function SystemAdminSchoolsPage() {
                 <div className="flex gap-2">
                   <button
                     onClick={() => copyCode(school.schoolCode)}
-                    className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+                    className="p-2 rounded-lg bg-slate-100 hover:bg-white/20 transition-colors"
                   >
                     <CopyIcon className="w-3.5 h-3.5 text-muted-foreground" />
                   </button>

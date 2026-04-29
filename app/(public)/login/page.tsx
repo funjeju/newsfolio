@@ -108,7 +108,7 @@ export default function LoginPage() {
               value={email}
               onChange={e => setEmail(e.target.value)}
               required
-              className="w-full p-3 rounded-xl bg-white/5 border border-border/50 focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/30 outline-none transition-all"
+              className="w-full p-3 rounded-xl bg-slate-100/70 border border-border/50 focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/30 outline-none transition-all"
               placeholder="이메일을 입력하세요"
             />
           </div>
@@ -119,7 +119,7 @@ export default function LoginPage() {
               value={password}
               onChange={e => setPassword(e.target.value)}
               required
-              className="w-full p-3 rounded-xl bg-white/5 border border-border/50 focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/30 outline-none transition-all"
+              className="w-full p-3 rounded-xl bg-slate-100/70 border border-border/50 focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/30 outline-none transition-all"
               placeholder="비밀번호를 입력하세요"
             />
           </div>

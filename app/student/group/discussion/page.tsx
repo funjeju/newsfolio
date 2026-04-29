@@ -220,7 +220,7 @@ function ReplyView({
               <div className="flex items-center gap-2 mb-1.5">
                 <div className={cn(
                   "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold",
-                  isMe ? "bg-brand-500 text-white" : "bg-white/10"
+                  isMe ? "bg-brand-500 text-white" : "bg-slate-100"
                 )}>
                   {reply.authorName.charAt(0)}
                 </div>
@@ -245,7 +245,7 @@ function ReplyView({
           onChange={e => setBody(e.target.value)}
           rows={3}
           placeholder="의견을 입력하세요..."
-          className="w-full p-3 bg-white/5 border border-border/50 rounded-xl text-sm resize-none focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
+          className="w-full p-3 bg-slate-100/70 border border-border/50 rounded-xl text-sm resize-none focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
         />
         <button
           onClick={handleSend}
@@ -354,7 +354,7 @@ export default function GroupDiscussionPage() {
           <select
             value={newSector}
             onChange={e => setNewSector(e.target.value)}
-            className="w-full p-3 bg-white/5 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50"
+            className="w-full p-3 bg-slate-100/70 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50"
           >
             <option value="">섹터 선택 (선택 사항)</option>
             {Object.entries(SECTOR_NAMES).map(([id, name]) => (
@@ -365,14 +365,14 @@ export default function GroupDiscussionPage() {
             value={newTitle}
             onChange={e => setNewTitle(e.target.value)}
             placeholder="토론 제목"
-            className="w-full p-3 bg-white/5 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
+            className="w-full p-3 bg-slate-100/70 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
           />
           <textarea
             value={newBody}
             onChange={e => setNewBody(e.target.value)}
             rows={3}
             placeholder="토론 내용을 입력하세요..."
-            className="w-full p-3 bg-white/5 border border-border/50 rounded-xl text-sm resize-none focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
+            className="w-full p-3 bg-slate-100/70 border border-border/50 rounded-xl text-sm resize-none focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
           />
           <div className="flex gap-2">
             <button
@@ -385,7 +385,7 @@ export default function GroupDiscussionPage() {
             </button>
             <button
               onClick={() => setShowNewThread(false)}
-              className="px-4 py-2.5 bg-white/5 rounded-xl text-sm font-semibold hover:bg-white/10 transition-colors"
+              className="px-4 py-2.5 bg-slate-100/70 rounded-xl text-sm font-semibold hover:bg-slate-100 transition-colors"
             >
               취소
             </button>

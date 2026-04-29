@@ -28,7 +28,7 @@ const MOCK_CLASS_SUMMARY = [
 const STATE_STYLE = {
   running:    { label: "진행 중", color: "text-score-up bg-score-up/10", icon: ActivityIcon },
   setup:      { label: "준비 중", color: "text-yellow-400 bg-yellow-500/10", icon: ClockIcon },
-  finished:   { label: "종료",   color: "text-muted-foreground bg-white/5", icon: CheckCircle2Icon },
+  finished:   { label: "종료",   color: "text-muted-foreground bg-slate-100/70", icon: CheckCircle2Icon },
 };
 
 function StatCard({ label, value, sub, icon: Icon, color }: { label: string; value: string | number; sub?: string; icon: any; color: string }) {
@@ -78,7 +78,7 @@ export default function SchoolAdminDashboard() {
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-white/5 text-muted-foreground text-xs uppercase tracking-wider">
+            <thead className="bg-slate-100/70 text-muted-foreground text-xs uppercase tracking-wider">
               <tr>
                 <th className="px-5 py-3 text-left">반</th>
                 <th className="px-5 py-3 text-left">담당 교사</th>
@@ -98,7 +98,7 @@ export default function SchoolAdminDashboard() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: i * 0.04 }}
-                    className="hover:bg-white/5 transition-colors"
+                    className="hover:bg-slate-100/70 transition-colors"
                   >
                     <td className="px-5 py-3 font-semibold">{cls.name}</td>
                     <td className="px-5 py-3 text-muted-foreground">{cls.teacher}</td>

@@ -37,7 +37,7 @@ export default function TeacherEvaluationsPage() {
           <h1 className="text-3xl font-display font-bold">평가 현황</h1>
           <p className="text-muted-foreground mt-1">반 전체 및 개별 학생 성과 분석</p>
         </div>
-        <div className="flex gap-1 bg-white/5 rounded-xl p-1 border border-border/50">
+        <div className="flex gap-1 bg-slate-100/70 rounded-xl p-1 border border-border/50">
           {PERIODS.map(p => (
             <button
               key={p}
@@ -97,7 +97,7 @@ export default function TeacherEvaluationsPage() {
                       <span className={cn("font-medium", METRIC_COLORS[mi])}>{metric}</span>
                       <span className="font-bold">{avg}점</span>
                     </div>
-                    <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                    <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
                       <div className="h-full bg-gradient-to-r from-brand-500 to-purple-500 rounded-full transition-all" style={{ width: `${avg}%` }} />
                     </div>
                   </div>

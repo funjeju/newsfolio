@@ -85,7 +85,7 @@ export default function TeacherSettingsPage() {
             <button
               key={t.level}
               onClick={() => setToneLevel(t.level)}
-              className={cn("p-3 rounded-xl border text-sm font-medium transition-all text-left", toneLevel === t.level ? "bg-brand-500/20 border-brand-500 text-brand-300" : "bg-white/5 border-border/50")}
+              className={cn("p-3 rounded-xl border text-sm font-medium transition-all text-left", toneLevel === t.level ? "bg-brand-500/20 border-brand-500 text-brand-300" : "bg-slate-100/70 border-border/50")}
             >
               Tone {t.level} — {t.label}
             </button>
@@ -102,7 +102,7 @@ export default function TeacherSettingsPage() {
         ].map(f => (
           <div key={f.label} className="flex items-center justify-between">
             <label className="text-sm font-medium">{f.label}</label>
-            <input type="time" value={f.value} onChange={e => f.onChange(e.target.value)} className="p-2 bg-white/5 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50" />
+            <input type="time" value={f.value} onChange={e => f.onChange(e.target.value)} className="p-2 bg-slate-100/70 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50" />
           </div>
         ))}
       </div>
@@ -118,7 +118,7 @@ export default function TeacherSettingsPage() {
           <button
             key={opt.id}
             onClick={() => setConfirmMode(opt.id)}
-            className={cn("w-full flex items-start gap-3 p-3 rounded-xl border text-left transition-all", confirmMode === opt.id ? "bg-brand-500/20 border-brand-500" : "bg-white/5 border-border/50")}
+            className={cn("w-full flex items-start gap-3 p-3 rounded-xl border text-left transition-all", confirmMode === opt.id ? "bg-brand-500/20 border-brand-500" : "bg-slate-100/70 border-border/50")}
           >
             <div className={cn("w-4 h-4 rounded-full border-2 mt-0.5 flex-shrink-0", confirmMode === opt.id ? "bg-brand-500 border-brand-500" : "border-muted-foreground")} />
             <div>
@@ -144,7 +144,7 @@ export default function TeacherSettingsPage() {
             <button
               key={s.id}
               onClick={() => toggleSector(s.id)}
-              className={cn("flex items-center gap-2 p-3 rounded-xl border text-sm font-medium transition-all", activeSectors.includes(s.id) ? "bg-brand-500/20 border-brand-500 text-brand-300" : "bg-white/5 border-border/50 text-muted-foreground")}
+              className={cn("flex items-center gap-2 p-3 rounded-xl border text-sm font-medium transition-all", activeSectors.includes(s.id) ? "bg-brand-500/20 border-brand-500 text-brand-300" : "bg-slate-100/70 border-border/50 text-muted-foreground")}
             >
               <span>{s.icon}</span>
               <span className="flex-1 text-left">{s.name}</span>
@@ -158,7 +158,7 @@ export default function TeacherSettingsPage() {
         <h3 className="font-bold">안전 포털 도메인</h3>
         <div className="space-y-2">
           {domains.map(d => (
-            <div key={d.domain} className="flex items-center justify-between p-2 bg-white/5 rounded-xl">
+            <div key={d.domain} className="flex items-center justify-between p-2 bg-slate-100/70 rounded-xl">
               <span className="font-mono text-sm text-brand-300">{d.domain}</span>
               <button onClick={() => removeDomain(d.domain)} className="text-muted-foreground hover:text-red-400 transition-colors">
                 <TrashIcon className="w-4 h-4" />
@@ -173,7 +173,7 @@ export default function TeacherSettingsPage() {
             onChange={e => setNewDomain(e.target.value)}
             onKeyDown={e => e.key === "Enter" && addDomain()}
             placeholder="예: bloomberg.com"
-            className="flex-1 p-2 bg-white/5 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50"
+            className="flex-1 p-2 bg-slate-100/70 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50"
           />
           <button onClick={addDomain} className="flex items-center gap-1.5 px-4 py-2 bg-brand-500/20 text-brand-300 rounded-xl text-sm font-medium hover:bg-brand-500/30 transition-colors">
             <PlusIcon className="w-4 h-4" /> 추가

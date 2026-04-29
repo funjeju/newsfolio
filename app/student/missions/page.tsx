@@ -53,7 +53,7 @@ const MOCK_MISSIONS: Mission[] = [
 const statusConfig = {
   completed: { label: "완료", color: "text-score-up", bg: "bg-score-up/10 border-score-up/30", icon: CheckCircleIcon },
   in_progress: { label: "진행 중", color: "text-brand-400", bg: "bg-brand-500/10 border-brand-500/30", icon: TargetIcon },
-  locked: { label: "잠김", color: "text-muted-foreground", bg: "bg-white/5 border-border/30", icon: LockIcon },
+  locked: { label: "잠김", color: "text-muted-foreground", bg: "bg-slate-100/70 border-border/30", icon: LockIcon },
 };
 
 export default function MissionsPage() {
@@ -76,7 +76,7 @@ export default function MissionsPage() {
           <span className="font-medium">전체 진행률</span>
           <span className="text-brand-400 font-bold">{Math.round((completedCount / MOCK_MISSIONS.length) * 100)}%</span>
         </div>
-        <div className="h-2.5 bg-white/10 rounded-full overflow-hidden">
+        <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden">
           <div
             className="h-full rounded-full bg-gradient-to-r from-brand-500 to-purple-500 transition-all"
             style={{ width: `${(completedCount / MOCK_MISSIONS.length) * 100}%` }}
@@ -118,7 +118,7 @@ export default function MissionsPage() {
 
                 {mission.status === "in_progress" && mission.progress !== undefined && mission.total !== undefined && (
                   <div className="space-y-1">
-                    <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                    <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
                       <div
                         className="h-full rounded-full bg-brand-500 transition-all"
                         style={{ width: `${(mission.progress / mission.total) * 100}%` }}

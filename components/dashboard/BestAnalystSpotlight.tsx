@@ -83,7 +83,7 @@ export function BestAnalystSpotlight({ className, date }: Props) {
       </div>
 
       {/* Score Delta */}
-      <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-border/50 relative z-10">
+      <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-100/70 border border-border/50 relative z-10">
         <div className="text-center flex-1">
           <div className="text-xs text-muted-foreground mb-1">AI 원래 점수</div>
           <div className="text-2xl font-bold text-muted-foreground">

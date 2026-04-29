@@ -56,7 +56,7 @@ export default function TeacherLayout({ children }: { children: ReactNode }) {
                   "flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-all",
                   (pathname === link.href || pathname.startsWith(link.href + "/"))
                     ? "bg-brand-500/20 text-brand-300 border border-brand-500/30"
-                    : "text-muted-foreground hover:bg-white/5 hover:text-foreground"
+                    : "text-muted-foreground hover:bg-slate-100/70 hover:text-foreground"
                 )}
               >
                 <Icon className="w-5 h-5" />

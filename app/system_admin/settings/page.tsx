@@ -112,7 +112,7 @@ export default function SystemAdminSettingsPage() {
               <input
                 value={settings[key] as string}
                 onChange={e => update(key, e.target.value)}
-                className="w-full p-2.5 bg-white/5 border border-border/50 rounded-xl text-sm font-mono focus:outline-none focus:border-red-500/50"
+                className="w-full p-2.5 bg-slate-100/70 border border-border/50 rounded-xl text-sm font-mono focus:outline-none focus:border-red-500/50"
               />
             </div>
           ))}

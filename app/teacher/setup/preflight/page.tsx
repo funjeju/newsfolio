@@ -79,7 +79,7 @@ export default function TeacherPreflightPage() {
             >
               <div className={cn(
                 "w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold",
-                isDone ? "bg-emerald-500/20 text-emerald-400" : item.required ? "bg-yellow-500/20 text-yellow-500" : "bg-white/10 text-muted-foreground"
+                isDone ? "bg-emerald-500/20 text-emerald-400" : item.required ? "bg-yellow-500/20 text-yellow-500" : "bg-slate-100 text-muted-foreground"
               )}>
                 {isDone ? <CheckCircleIcon className="w-4 h-4" /> : <AlertTriangleIcon className="w-3.5 h-3.5" />}
               </div>
@@ -89,7 +89,7 @@ export default function TeacherPreflightPage() {
                   {item.required ? (
                     <span className="text-[10px] bg-red-500/10 text-red-400 px-1.5 py-0.5 rounded-full">필수</span>
                   ) : (
-                    <span className="text-[10px] bg-white/10 text-muted-foreground px-1.5 py-0.5 rounded-full">권장</span>
+                    <span className="text-[10px] bg-slate-100 text-muted-foreground px-1.5 py-0.5 rounded-full">권장</span>
                   )}
                 </div>
                 <div className="text-xs text-muted-foreground">{isParentNotice ? (parentNoticesSent ? "발송 완료" : "발송 전입니다") : item.detail}</div>

@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
-  Plus, Users, LayoutDashboard, ZapIcon, TrophyIcon,
-  ChevronRightIcon, BellIcon, BookOpenIcon, SettingsIcon, UsersIcon,
-  PieChartIcon, AwardIcon, ClipboardListIcon
+  Plus, ZapIcon, TrophyIcon,
+  ChevronRightIcon, SettingsIcon, UsersIcon,
+  AwardIcon, ClipboardListIcon, TrendingUpIcon, TrendingDownIcon, ExternalLinkIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { MOCK_IMPACTS, MOCK_SECTORS } from "@/lib/mockData";
 
 const MOCK_CLASS = {
   name: "5학년 3반",
@@ -38,7 +39,7 @@ function StatCard({ label, value, sub, icon, colorClass, href }: {
   icon: React.ReactNode; colorClass: string; href?: string;
 }) {
   const content = (
-    <div className={cn("glass p-5 rounded-2xl border border-border/50 flex flex-col gap-3 h-full hover:border-white/20 transition-colors", href ? "cursor-pointer" : "")}>
+    <div className={cn("bg-white border border-slate-200 shadow-sm p-5 rounded-2xl flex flex-col gap-3 h-full hover:border-indigo-200 hover:shadow-md transition-all", href ? "cursor-pointer" : "")}>
       <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center", colorClass)}>
         {icon}
       </div>
@@ -54,7 +55,7 @@ function StatCard({ label, value, sub, icon, colorClass, href }: {
 
 function QuickAction({ href, icon, label, badge }: { href: string; icon: React.ReactNode; label: string; badge?: number }) {
   return (
-    <Link href={href} className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-border/50 hover:border-white/20 transition-all group">
+    <Link href={href} className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white hover:bg-indigo-50 border border-slate-200 hover:border-indigo-200 transition-all group">
       <div className="text-brand-400">{icon}</div>
       <span className="font-medium text-sm flex-1">{label}</span>
       {badge && badge > 0 ? (
@@ -77,17 +78,26 @@ export default function TeacherDashboardPage() {
           <div className="text-sm text-muted-foreground mb-1">교사 대시보드</div>
           <h1 className="text-3xl font-display font-bold">{cls.name}</h1>
         </div>
-        <Link
-          href="/teacher/setup"
-          className="flex items-center gap-2 bg-brand-500 text-white px-4 py-2.5 rounded-xl font-semibold hover:bg-brand-600 transition-all shadow-[0_0_20px_rgba(99,102,241,0.3)]"
-        >
-          <Plus className="w-5 h-5" />
-          새 학급 만들기
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm border border-slate-200 bg-white hover:bg-slate-50 transition-colors text-slate-600"
+          >
+            <ExternalLinkIcon className="w-4 h-4" />
+            섹터 현황 메인
+          </Link>
+          <Link
+            href="/teacher/setup"
+            className="flex items-center gap-2 bg-brand-500 text-white px-4 py-2.5 rounded-xl font-semibold hover:bg-brand-600 transition-all shadow-[0_0_20px_rgba(99,102,241,0.3)]"
+          >
+            <Plus className="w-5 h-5" />
+            새 학급 만들기
+          </Link>
+        </div>
       </div>
 
       {/* Class Status Bar */}
-      <div className="glass p-5 rounded-2xl border border-border/50">
+      <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm">
           <div>
             <div className="text-muted-foreground mb-1">학생</div>
@@ -112,24 +122,24 @@ export default function TeacherDashboardPage() {
       <motion.div
         initial={{ opacity: 0, scale: 0.97 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="glass p-5 rounded-2xl border border-yellow-500/30 bg-yellow-500/5"
+        className="bg-amber-50 border border-amber-300 p-5 rounded-2xl"
       >
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-yellow-500/20 text-yellow-400 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center">
               <ZapIcon className="w-5 h-5" />
             </div>
             <div>
-              <div className="font-bold text-lg flex items-center gap-2">
+              <div className="font-bold text-lg flex items-center gap-2 text-slate-800">
                 컨펌 큐
-                <span className="text-sm font-bold bg-yellow-500/20 text-yellow-400 px-2 py-0.5 rounded-full">{cls.pendingQueue.total}건 대기</span>
+                <span className="text-sm font-bold bg-amber-200 text-amber-800 px-2 py-0.5 rounded-full">{cls.pendingQueue.total}건 대기</span>
               </div>
-              <div className="text-sm text-muted-foreground mt-0.5">
+              <div className="text-sm text-amber-700 mt-0.5">
                 이의제기 {cls.pendingQueue.objections}건 · 포지션 변경 {cls.pendingQueue.transactions}건 · 도메인 요청 {cls.pendingQueue.domains}건
               </div>
             </div>
           </div>
-          <Link href="/teacher/approvals" className="flex items-center gap-2 px-4 py-2.5 bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 rounded-xl font-bold hover:bg-yellow-500/30 transition-colors flex-shrink-0">
+          <Link href="/teacher/approvals" className="flex items-center gap-2 px-4 py-2.5 bg-amber-500 text-white rounded-xl font-bold hover:bg-amber-600 transition-colors flex-shrink-0">
             컨펌 큐 열기 <ChevronRightIcon className="w-4 h-4" />
           </Link>
         </div>
@@ -141,34 +151,79 @@ export default function TeacherDashboardPage() {
           label="우리 반 랭킹"
           value={`${cls.ranking.current}위`}
           sub={`${cls.ranking.label} ${cls.ranking.total}개 반`}
-          icon={<TrophyIcon className="w-5 h-5 text-yellow-400" />}
-          colorClass="bg-yellow-500/20"
+          icon={<TrophyIcon className="w-5 h-5 text-amber-600" />}
+          colorClass="bg-amber-100"
           href="/teacher/students"
         />
         <StatCard
           label="이번 주 조 1위"
           value={cls.bestGroup}
           sub="주간 수익률 +5.2%"
-          icon={<AwardIcon className="w-5 h-5 text-brand-400" />}
-          colorClass="bg-brand-500/20"
+          icon={<AwardIcon className="w-5 h-5 text-indigo-600" />}
+          colorClass="bg-indigo-100"
           href="/teacher/groups"
         />
         <StatCard
           label="활동 학생"
           value={`${cls.activeStudents}명`}
           sub={`${Math.round(cls.activeStudents/cls.totalStudents*100)}% 참여`}
-          icon={<UsersIcon className="w-5 h-5 text-emerald-400" />}
-          colorClass="bg-emerald-500/20"
+          icon={<UsersIcon className="w-5 h-5 text-emerald-600" />}
+          colorClass="bg-emerald-100"
           href="/teacher/students"
         />
         <StatCard
           label="전체 조"
           value={`${cls.groups}조`}
           sub="조당 평균 4명"
-          icon={<UsersIcon className="w-5 h-5 text-purple-400" />}
-          colorClass="bg-purple-500/20"
+          icon={<UsersIcon className="w-5 h-5 text-violet-600" />}
+          colorClass="bg-violet-100"
           href="/teacher/groups"
         />
+      </div>
+
+      {/* Sector Summary */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between px-1">
+          <h2 className="font-bold text-lg">오늘의 섹터 등락률</h2>
+          <Link href="/" className="text-xs text-indigo-600 hover:underline font-medium flex items-center gap-1">
+            전체 순위 보기 <ChevronRightIcon className="w-3 h-3" />
+          </Link>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
+          {[...MOCK_IMPACTS]
+            .sort((a, b) => b.dailyReturn - a.dailyReturn)
+            .map((impact) => {
+              const sector = MOCK_SECTORS.find(s => s.id === impact.sectorId);
+              if (!sector) return null;
+              const isUp = impact.dailyReturn > 0;
+              const isDown = impact.dailyReturn < 0;
+              return (
+                <motion.div
+                  key={sector.id}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={cn(
+                    "flex flex-col items-center gap-1.5 p-3 rounded-xl border text-center",
+                    isUp
+                      ? "bg-emerald-50 border-emerald-200"
+                      : isDown
+                      ? "bg-red-50 border-red-200"
+                      : "bg-slate-50 border-slate-200"
+                  )}
+                >
+                  <span className="text-xl">{sector.icon}</span>
+                  <span className="text-xs font-semibold text-slate-700 leading-tight">{sector.name}</span>
+                  <div className={cn(
+                    "flex items-center gap-0.5 text-sm font-bold",
+                    isUp ? "text-emerald-600" : isDown ? "text-red-500" : "text-slate-400"
+                  )}>
+                    {isUp ? <TrendingUpIcon className="w-3.5 h-3.5" /> : isDown ? <TrendingDownIcon className="w-3.5 h-3.5" /> : null}
+                    {isUp ? "+" : ""}{impact.dailyReturn.toFixed(2)}%
+                  </div>
+                </motion.div>
+              );
+            })}
+        </div>
       </div>
 
       {/* Quick Actions */}

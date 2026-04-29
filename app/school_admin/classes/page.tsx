@@ -39,7 +39,7 @@ const STATE_STYLE = {
   setup:       { label: "준비 중",  color: "text-yellow-400 bg-yellow-500/10" },
   running:     { label: "진행 중",  color: "text-score-up bg-score-up/10" },
   final_week:  { label: "파이널",   color: "text-orange-400 bg-orange-500/10" },
-  finished:    { label: "종료됨",   color: "text-muted-foreground bg-white/5" },
+  finished:    { label: "종료됨",   color: "text-muted-foreground bg-slate-100/70" },
 };
 
 export default function SchoolAdminClassesPage() {
@@ -72,7 +72,7 @@ export default function SchoolAdminClassesPage() {
         value={search}
         onChange={e => setSearch(e.target.value)}
         placeholder="반 이름 또는 교사 이름으로 검색"
-        className="w-full px-4 py-3 bg-white/5 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
+        className="w-full px-4 py-3 bg-slate-100/70 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
       />
 
       {/* Cards Grid */}
@@ -101,15 +101,15 @@ export default function SchoolAdminClassesPage() {
 
               {/* Stats */}
               <div className="grid grid-cols-3 gap-2 text-center">
-                <div className="bg-white/5 rounded-xl p-2">
+                <div className="bg-slate-100/70 rounded-xl p-2">
                   <p className="text-sm font-bold">{cls.students}</p>
                   <p className="text-[10px] text-muted-foreground">학생</p>
                 </div>
-                <div className="bg-white/5 rounded-xl p-2">
+                <div className="bg-slate-100/70 rounded-xl p-2">
                   <p className="text-sm font-bold">{cls.groups}</p>
                   <p className="text-[10px] text-muted-foreground">조</p>
                 </div>
-                <div className={cn("bg-white/5 rounded-xl p-2")}>
+                <div className={cn("bg-slate-100/70 rounded-xl p-2")}>
                   <p className={cn("text-sm font-bold", isRunning ? (cls.avgReturn >= 0 ? "text-score-up" : "text-score-down") : "")}>
                     {isRunning ? `${cls.avgReturn >= 0 ? "+" : ""}${cls.avgReturn}%` : "-"}
                   </p>
@@ -118,14 +118,14 @@ export default function SchoolAdminClassesPage() {
               </div>
 
               {/* Class Code */}
-              <div className="flex items-center justify-between bg-white/5 rounded-xl p-3">
+              <div className="flex items-center justify-between bg-slate-100/70 rounded-xl p-3">
                 <div>
                   <p className="text-[10px] text-muted-foreground mb-0.5">클래스 코드</p>
                   <p className="font-mono font-bold text-sm tracking-widest">{cls.classCode}</p>
                 </div>
                 <button
                   onClick={() => copyCode(cls.classCode)}
-                  className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+                  className="p-2 rounded-lg bg-slate-100 hover:bg-white/20 transition-colors"
                 >
                   <CopyIcon className="w-4 h-4 text-muted-foreground" />
                 </button>

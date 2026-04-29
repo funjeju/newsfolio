@@ -193,7 +193,7 @@ export default function StudentObjectionsPage() {
                 </div>
 
                 {/* Logic summary */}
-                <p className="text-sm text-muted-foreground bg-white/5 rounded-xl p-3 leading-relaxed line-clamp-2">
+                <p className="text-sm text-muted-foreground bg-slate-100/70 rounded-xl p-3 leading-relaxed line-clamp-2">
                   {obj.logic?.why}
                 </p>
 

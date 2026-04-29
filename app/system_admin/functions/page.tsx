@@ -75,7 +75,7 @@ export default function SystemAdminFunctionsPage() {
         </div>
         <button
           onClick={() => toast.success("함수 상태 새로고침됐어요.")}
-          className="flex items-center gap-2 px-4 py-2.5 bg-white/5 border border-border/50 rounded-xl text-sm font-semibold hover:bg-white/10 transition-colors"
+          className="flex items-center gap-2 px-4 py-2.5 bg-slate-100/70 border border-border/50 rounded-xl text-sm font-semibold hover:bg-slate-100 transition-colors"
         >
           <RefreshCwIcon className="w-4 h-4" />
           새로고침

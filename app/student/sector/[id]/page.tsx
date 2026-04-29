@@ -157,17 +157,17 @@ export default function SectorDetailPage({ params }: { params: Promise<{ id: str
 
           {/* Metrics */}
           <div className="grid grid-cols-3 gap-2 mt-5">
-            <div className="p-3 rounded-xl bg-white/5 border border-border/50 text-center">
+            <div className="p-3 rounded-xl bg-slate-100/70 border border-border/50 text-center">
               <p className="text-xs text-muted-foreground mb-1">오늘 등락률</p>
               <p className={cn("text-xl font-bold", isPositive ? "text-score-up" : isNegative ? "text-score-down" : "text-muted-foreground")}>
                 {isPositive ? "+" : ""}{impact.dailyReturn.toFixed(2)}%
               </p>
             </div>
-            <div className="p-3 rounded-xl bg-white/5 border border-border/50 text-center">
+            <div className="p-3 rounded-xl bg-slate-100/70 border border-border/50 text-center">
               <p className="text-xs text-muted-foreground mb-1">영향도</p>
               <p className="text-xl font-bold">{impact.impactScore > 0 ? "+" : ""}{impact.impactScore}</p>
             </div>
-            <div className="p-3 rounded-xl bg-white/5 border border-border/50 text-center">
+            <div className="p-3 rounded-xl bg-slate-100/70 border border-border/50 text-center">
               <p className="text-xs text-muted-foreground mb-1">순위 변동</p>
               <div className="flex items-center justify-center gap-1 text-xl font-bold">
                 {impact.rankChange > 0 ? (
@@ -184,7 +184,7 @@ export default function SectorDetailPage({ params }: { params: Promise<{ id: str
       </motion.div>
 
       {/* Tabs */}
-      <div className="flex gap-1 bg-white/5 p-1 rounded-xl">
+      <div className="flex gap-1 bg-slate-100/70 p-1 rounded-xl">
         {([
           { id: "analysis", label: "🔍 AI 분석", icon: SearchIcon },
           { id: "history", label: "📈 히스토리", icon: TrendingUpIcon },
@@ -297,7 +297,7 @@ export default function SectorDetailPage({ params }: { params: Promise<{ id: str
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.08 }}
-                    className="flex items-start gap-3 p-3 bg-white/5 rounded-xl"
+                    className="flex items-start gap-3 p-3 bg-slate-100/70 rounded-xl"
                   >
                     <div className="w-8 h-8 rounded-lg bg-brand-500/20 flex items-center justify-center text-brand-300 font-bold text-sm shrink-0">
                       {i + 1}

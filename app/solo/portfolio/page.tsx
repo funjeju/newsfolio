@@ -114,7 +114,7 @@ export default function SoloPortfolio() {
                     className={`flex items-center gap-3 p-3 rounded-xl border transition-all text-left ${
                       isSelected
                         ? "border-emerald-500/40 bg-emerald-500/10"
-                        : "border-border/50 bg-white/5 hover:bg-white/10"
+                        : "border-border/50 bg-slate-100/70 hover:bg-slate-100"
                     }`}
                   >
                     <span className="text-xl w-7 text-center">{sector.icon}</span>

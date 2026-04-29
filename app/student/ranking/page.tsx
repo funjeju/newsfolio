@@ -74,7 +74,7 @@ export default function RankingPage() {
 
       {/* Tab + Period Controls */}
       <div className="flex flex-col sm:flex-row gap-3 justify-between items-start sm:items-center">
-        <div className="flex gap-1 p-1 bg-white/5 rounded-xl border border-border/50">
+        <div className="flex gap-1 p-1 bg-slate-100/70 rounded-xl border border-border/50">
           {([["individual", "👤 개인"], ["group", "👥 조별"]] as const).map(([t, label]) => (
             <button
               key={t}
@@ -89,14 +89,14 @@ export default function RankingPage() {
           ))}
         </div>
 
-        <div className="flex gap-1 p-1 bg-white/5 rounded-xl border border-border/50">
+        <div className="flex gap-1 p-1 bg-slate-100/70 rounded-xl border border-border/50">
           {([["weekly", "주간"], ["monthly", "월간"], ["season", "시즌"]] as const).map(([p, label]) => (
             <button
               key={p}
               onClick={() => setPeriod(p)}
               className={cn(
                 "px-3 py-2 rounded-lg text-xs font-bold transition-all",
-                period === p ? "bg-white/10 text-foreground" : "text-muted-foreground hover:text-foreground"
+                period === p ? "bg-slate-100 text-foreground" : "text-muted-foreground hover:text-foreground"
               )}
             >
               {label}

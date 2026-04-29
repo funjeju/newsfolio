@@ -123,7 +123,7 @@ export default function StudentReportsPage() {
               "px-4 py-1.5 rounded-full text-sm font-semibold whitespace-nowrap transition-colors border",
               filter === f
                 ? "bg-brand-500 text-white border-brand-500"
-                : "bg-white/5 text-muted-foreground border-border/50 hover:bg-white/10"
+                : "bg-slate-100/70 text-muted-foreground border-border/50 hover:bg-slate-100"
             )}
           >
             {f === "all" ? "전체" : TYPE_LABELS[f]}

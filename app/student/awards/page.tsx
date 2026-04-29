@@ -134,7 +134,7 @@ export default function AwardsPage() {
                   <button
                     onClick={() => handleDownloadPDF(award)}
                     disabled={downloading === award.id}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg text-xs font-medium transition-colors disabled:opacity-50"
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-white/20 rounded-lg text-xs font-medium transition-colors disabled:opacity-50"
                   >
                     <DownloadIcon className="w-3.5 h-3.5" />
                     {downloading === award.id ? "생성 중..." : "PDF"}

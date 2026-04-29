@@ -157,7 +157,7 @@ export default function JoinPage() {
               <div key={s} className="flex items-center gap-2">
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs transition-colors
                   ${step === s ? "bg-brand-500 text-white" :
-                    arr.indexOf(step) > idx ? "bg-emerald-500/20 text-emerald-400" : "bg-white/10 text-muted-foreground"}`}>
+                    arr.indexOf(step) > idx ? "bg-emerald-500/20 text-emerald-400" : "bg-slate-100 text-muted-foreground"}`}>
                   {arr.indexOf(step) > idx ? <CheckIcon className="w-3 h-3" /> : idx + 1}
                 </div>
                 {idx < arr.length - 1 && <div className="w-8 h-px bg-border/50" />}
@@ -177,7 +177,7 @@ export default function JoinPage() {
               <div className="grid grid-cols-2 gap-3">
                 <button
                   onClick={() => handleRoleSelect("student")}
-                  className="flex flex-col items-center gap-3 p-6 rounded-2xl border border-border/50 bg-white/5 hover:bg-brand-500/10 hover:border-brand-500/30 transition-all group"
+                  className="flex flex-col items-center gap-3 p-6 rounded-2xl border border-border/50 bg-slate-100/70 hover:bg-brand-500/10 hover:border-brand-500/30 transition-all group"
                 >
                   <div className="w-12 h-12 rounded-2xl bg-brand-500/10 flex items-center justify-center group-hover:bg-brand-500/20 transition-colors">
                     <BookOpenIcon className="w-6 h-6 text-brand-400" />
@@ -189,7 +189,7 @@ export default function JoinPage() {
                 </button>
                 <button
                   onClick={() => handleRoleSelect("teacher")}
-                  className="flex flex-col items-center gap-3 p-6 rounded-2xl border border-border/50 bg-white/5 hover:bg-purple-500/10 hover:border-purple-500/30 transition-all group"
+                  className="flex flex-col items-center gap-3 p-6 rounded-2xl border border-border/50 bg-slate-100/70 hover:bg-purple-500/10 hover:border-purple-500/30 transition-all group"
                 >
                   <div className="w-12 h-12 rounded-2xl bg-purple-500/10 flex items-center justify-center group-hover:bg-purple-500/20 transition-colors">
                     <GraduationCapIcon className="w-6 h-6 text-purple-400" />
@@ -202,7 +202,7 @@ export default function JoinPage() {
               </div>
               <button
                 onClick={() => handleRoleSelect("solo")}
-                className="w-full flex items-center gap-4 p-5 rounded-2xl border border-border/50 bg-white/5 hover:bg-emerald-500/10 hover:border-emerald-500/30 transition-all group"
+                className="w-full flex items-center gap-4 p-5 rounded-2xl border border-border/50 bg-slate-100/70 hover:bg-emerald-500/10 hover:border-emerald-500/30 transition-all group"
               >
                 <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center group-hover:bg-emerald-500/20 transition-colors flex-shrink-0">
                   <UserIcon className="w-6 h-6 text-emerald-400" />

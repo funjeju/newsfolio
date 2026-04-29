@@ -70,7 +70,7 @@ function ActivityDots({ days }: { days: boolean[] }) {
           key={i}
           className={cn(
             "w-2 h-2 rounded-full",
-            active ? "bg-brand-400" : "bg-white/10"
+            active ? "bg-brand-400" : "bg-slate-100"
           )}
           title={active ? "활동함" : "비활동"}
         />
@@ -150,7 +150,7 @@ export default function StudentGroupPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 bg-white/5 p-1 rounded-xl">
+      <div className="flex gap-1 bg-slate-100/70 p-1 rounded-xl">
         {(["overview", "members", "chat"] as const).map(t => (
           <button
             key={t}
@@ -182,8 +182,8 @@ export default function StudentGroupPage() {
             {[...MOCK_GROUP.members].sort((a, b) => b.totalValue - a.totalValue).map((m, i) => {
               const roleInfo = ROLE_LABELS[m.role];
               return (
-                <div key={m.id} className={cn("flex items-center gap-3 p-3 rounded-xl", m.isMe ? "bg-brand-500/10 border border-brand-500/20" : "bg-white/5")}>
-                  <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center font-bold text-sm shrink-0">
+                <div key={m.id} className={cn("flex items-center gap-3 p-3 rounded-xl", m.isMe ? "bg-brand-500/10 border border-brand-500/20" : "bg-slate-100/70")}>
+                  <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-bold text-sm shrink-0">
                     {i + 1}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -224,7 +224,7 @@ export default function StudentGroupPage() {
                   <div className="flex items-start gap-4">
                     <div className={cn(
                       "w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold shrink-0",
-                      member.isMe ? "bg-brand-500 text-white" : "bg-white/10"
+                      member.isMe ? "bg-brand-500 text-white" : "bg-slate-100"
                     )}>
                       {member.name.charAt(0)}
                     </div>
@@ -240,7 +240,7 @@ export default function StudentGroupPage() {
                       </div>
                       <div className="flex flex-wrap gap-1 mb-2">
                         {member.sectorIds.map(s => (
-                          <span key={s} className="text-[10px] px-1.5 py-0.5 bg-white/10 rounded text-muted-foreground">
+                          <span key={s} className="text-[10px] px-1.5 py-0.5 bg-slate-100 rounded text-muted-foreground">
                             {s === "semiconductor" ? "💻 반도체" : s === "automotive" ? "🚗 자동차" : s}
                           </span>
                         ))}

@@ -134,7 +134,7 @@ export default function ObjectionNewPage() {
         </div>
         <div className="flex gap-1">
           {[1,2,3,4].map(s => (
-            <div key={s} className={cn("w-6 h-1.5 rounded-full transition-colors", s <= step ? "bg-brand-500" : "bg-white/10")} />
+            <div key={s} className={cn("w-6 h-1.5 rounded-full transition-colors", s <= step ? "bg-brand-500" : "bg-slate-100")} />
           ))}
         </div>
       </div>
@@ -154,7 +154,7 @@ export default function ObjectionNewPage() {
                     onClick={() => { setSelectedSector(s.id); setProposedScore(AI_SCORES[s.id]); }}
                     className={cn(
                       "flex items-center gap-2 p-3 rounded-xl border text-sm font-medium transition-all",
-                      selectedSector === s.id ? "bg-brand-500/20 border-brand-500 text-brand-300" : "bg-white/5 border-border/50 hover:border-white/20"
+                      selectedSector === s.id ? "bg-brand-500/20 border-brand-500 text-brand-300" : "bg-slate-100/70 border-border/50 hover:border-white/20"
                     )}
                   >
                     <span className="text-lg">{s.icon}</span>
@@ -166,7 +166,7 @@ export default function ObjectionNewPage() {
 
               {sector && (
                 <>
-                  <div className="flex justify-between items-center mb-4 p-3 bg-white/5 rounded-xl">
+                  <div className="flex justify-between items-center mb-4 p-3 bg-slate-100/70 rounded-xl">
                     <span className="text-sm text-muted-foreground">AI 원안</span>
                     <ScoreBadge score={aiScore} />
                   </div>
@@ -222,7 +222,7 @@ export default function ObjectionNewPage() {
                 <div className="space-y-2 mb-4">
                   <p className="text-sm font-semibold">추가된 출처 ({sources.length}/3)</p>
                   {sources.map(src => (
-                    <div key={src.id} className="flex items-center justify-between p-3 bg-white/5 rounded-xl">
+                    <div key={src.id} className="flex items-center justify-between p-3 bg-slate-100/70 rounded-xl">
                       <div className="flex items-center gap-2 text-sm">
                         <span className="text-brand-400 font-bold">{src.domain}</span>
                         <span className="text-muted-foreground">{src.publishedAt}</span>
@@ -241,7 +241,7 @@ export default function ObjectionNewPage() {
                 {MOCK_SOURCES.map(src => (
                   <div key={src.id} className={cn(
                     "p-3 rounded-xl border text-sm",
-                    src.isValid ? "border-border/50 bg-white/5" : "border-transparent bg-white/3 opacity-50"
+                    src.isValid ? "border-border/50 bg-slate-100/70" : "border-transparent bg-white/3 opacity-50"
                   )}>
                     <div className="flex items-center justify-between mb-1">
                       <div className="flex items-center gap-2">
@@ -286,7 +286,7 @@ export default function ObjectionNewPage() {
                   onChange={e => setLogic1(e.target.value)}
                   placeholder="예: AI가 단순 규제 완화만 반영했는데, 추가로 HBM 수요도 폭발적으로 늘고 있어서..."
                   rows={3}
-                  className="w-full p-3 bg-white/5 border border-border/50 rounded-xl text-sm resize-none focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
+                  className="w-full p-3 bg-slate-100/70 border border-border/50 rounded-xl text-sm resize-none focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
                 />
                 <div className="text-right text-xs text-muted-foreground">{logic1.length}/200</div>
               </div>
@@ -301,7 +301,7 @@ export default function ObjectionNewPage() {
                   onChange={e => setLogic2(e.target.value)}
                   placeholder="첨부한 출처 중 어떤 사실이 가장 결정적인가요?"
                   rows={3}
-                  className="w-full p-3 bg-white/5 border border-border/50 rounded-xl text-sm resize-none focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
+                  className="w-full p-3 bg-slate-100/70 border border-border/50 rounded-xl text-sm resize-none focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
                 />
               </div>
 
@@ -315,7 +315,7 @@ export default function ObjectionNewPage() {
                   onChange={e => setLogic3(e.target.value)}
                   placeholder="예: 다만 중국의 보복 조치 가능성이 남아있어서 불확실성이 완전히 사라진 건 아니에요."
                   rows={3}
-                  className="w-full p-3 bg-white/5 border border-border/50 rounded-xl text-sm resize-none focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
+                  className="w-full p-3 bg-slate-100/70 border border-border/50 rounded-xl text-sm resize-none focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
                 />
               </div>
             </div>
@@ -329,7 +329,7 @@ export default function ObjectionNewPage() {
               <h2 className="text-xl font-bold">최종 확인 후 제출해요</h2>
 
               {/* Score Preview */}
-              <div className="bg-white/5 rounded-2xl p-4 space-y-3">
+              <div className="bg-slate-100/70 rounded-2xl p-4 space-y-3">
                 <p className="text-sm font-semibold text-muted-foreground">내 의견이 채택된다면…</p>
                 <div className="flex items-center justify-center gap-4 text-2xl font-bold">
                   <span className="flex items-center gap-1">{sector?.icon} <ScoreBadge score={aiScore} /></span>
@@ -339,7 +339,7 @@ export default function ObjectionNewPage() {
               </div>
 
               {/* Portfolio Impact */}
-              <div className="bg-white/5 rounded-2xl p-4">
+              <div className="bg-slate-100/70 rounded-2xl p-4">
                 <p className="text-sm font-semibold text-muted-foreground mb-3">내 포트폴리오 영향 (시뮬레이션)</p>
                 <div className="flex items-center justify-between">
                   <div className="text-center">

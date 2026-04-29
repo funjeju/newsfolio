@@ -89,7 +89,7 @@ export default function TeacherGroupsPage() {
         </div>
         <button
           disabled
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-border/50 text-muted-foreground text-sm font-bold cursor-not-allowed opacity-50"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-100/70 border border-border/50 text-muted-foreground text-sm font-bold cursor-not-allowed opacity-50"
           title="Firestore 연동 후 활성화"
         >
           <ShuffleIcon className="w-4 h-4" />
@@ -114,7 +114,7 @@ export default function TeacherGroupsPage() {
               {/* Group Header */}
               <button
                 onClick={() => setExpandedId(isExpanded ? null : group.id)}
-                className="w-full flex items-center gap-4 p-5 text-left hover:bg-white/5 transition-colors"
+                className="w-full flex items-center gap-4 p-5 text-left hover:bg-slate-100/70 transition-colors"
               >
                 <div className="w-10 h-10 rounded-xl bg-brand-500/15 flex items-center justify-center font-display font-bold text-brand-400 flex-shrink-0">
                   {group.number}
@@ -131,7 +131,7 @@ export default function TeacherGroupsPage() {
                   <div className="flex items-center gap-2 mt-1 flex-wrap">
                     <span className="text-xs text-muted-foreground">메인 섹터:</span>
                     {group.mainSectors.map(s => (
-                      <span key={s} className="text-xs bg-white/10 px-2 py-0.5 rounded-full">{s}</span>
+                      <span key={s} className="text-xs bg-slate-100 px-2 py-0.5 rounded-full">{s}</span>
                     ))}
                   </div>
                 </div>
@@ -168,13 +168,13 @@ export default function TeacherGroupsPage() {
                   </div>
 
                   {group.members.map(member => (
-                    <div key={member.id} className="flex items-center gap-3 p-3 rounded-xl bg-white/5">
+                    <div key={member.id} className="flex items-center gap-3 p-3 rounded-xl bg-slate-100/70">
                       <div className="flex-1 flex items-center gap-2 flex-wrap">
                         <span className="font-medium text-sm">{member.name}</span>
                         {member.name === group.leader && (
                           <span className="text-[10px] bg-yellow-500/20 text-yellow-400 px-1.5 py-0.5 rounded font-bold">리더</span>
                         )}
-                        <span className={cn("text-[10px] px-1.5 py-0.5 rounded border font-bold", ROLE_COLORS[member.role] || "text-muted-foreground bg-white/5 border-border/50")}>
+                        <span className={cn("text-[10px] px-1.5 py-0.5 rounded border font-bold", ROLE_COLORS[member.role] || "text-muted-foreground bg-slate-100/70 border-border/50")}>
                           {member.role}
                         </span>
                       </div>
@@ -188,7 +188,7 @@ export default function TeacherGroupsPage() {
                   ))}
 
                   {/* Group Main Sectors */}
-                  <div className="mt-4 p-4 rounded-xl bg-white/5 border border-border/50">
+                  <div className="mt-4 p-4 rounded-xl bg-slate-100/70 border border-border/50">
                     <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
                       <PieChartIcon className="w-3.5 h-3.5" />
                       메인 섹터

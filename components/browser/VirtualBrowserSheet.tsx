@@ -123,7 +123,7 @@ export function VirtualBrowserSheet({ isOpen, onClose, onSelectSource, sectorNam
                   </span>
                 )}
               </div>
-              <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-white/10 transition-colors">
+              <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors">
                 <XIcon className="w-4 h-4" />
               </button>
             </div>
@@ -138,7 +138,7 @@ export function VirtualBrowserSheet({ isOpen, onClose, onSelectSource, sectorNam
               {/* Search Bar */}
               <div className="p-4 space-y-3">
                 <div className="flex gap-2">
-                  <div className="flex-1 flex items-center gap-2 bg-white/5 border border-border/50 rounded-xl px-3 py-2.5 focus-within:border-brand-500/50">
+                  <div className="flex-1 flex items-center gap-2 bg-slate-100/70 border border-border/50 rounded-xl px-3 py-2.5 focus-within:border-brand-500/50">
                     <SearchIcon className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                     <input
                       type="text"
@@ -166,7 +166,7 @@ export function VirtualBrowserSheet({ isOpen, onClose, onSelectSource, sectorNam
                       onClick={() => setSelectedDomain(null)}
                       className={cn(
                         "flex items-center gap-1 text-xs px-2.5 py-1.5 rounded-lg border font-medium transition-all",
-                        !selectedDomain ? "bg-brand-500/20 border-brand-500/40 text-brand-300" : "bg-white/5 border-border/50 text-muted-foreground hover:border-white/20"
+                        !selectedDomain ? "bg-brand-500/20 border-brand-500/40 text-brand-300" : "bg-slate-100/70 border-border/50 text-muted-foreground hover:border-white/20"
                       )}
                     >
                       전체
@@ -179,7 +179,7 @@ export function VirtualBrowserSheet({ isOpen, onClose, onSelectSource, sectorNam
                           "flex items-center gap-1 text-xs px-2.5 py-1.5 rounded-lg border font-medium transition-all",
                           selectedDomain === d.name
                             ? "bg-brand-500/20 border-brand-500/40 text-brand-300"
-                            : "bg-white/5 border-border/50 text-muted-foreground hover:border-white/20"
+                            : "bg-slate-100/70 border-border/50 text-muted-foreground hover:border-white/20"
                         )}
                       >
                         <span>{d.icon}</span>
@@ -213,7 +213,7 @@ export function VirtualBrowserSheet({ isOpen, onClose, onSelectSource, sectorNam
                       className={cn(
                         "p-4 rounded-xl border transition-all",
                         result.isValid
-                          ? "bg-white/5 border-border/50 hover:border-brand-500/30"
+                          ? "bg-slate-100/70 border-border/50 hover:border-brand-500/30"
                           : "bg-white/3 border-border/20 opacity-60"
                       )}
                     >
@@ -257,7 +257,7 @@ export function VirtualBrowserSheet({ isOpen, onClose, onSelectSource, sectorNam
                           >
                             <BookmarkIcon className="w-3 h-3" /> 출처로 추가
                           </button>
-                          <button className="flex items-center gap-1.5 px-3 py-2 bg-white/5 border border-border/50 rounded-lg text-xs text-muted-foreground hover:text-foreground transition-colors">
+                          <button className="flex items-center gap-1.5 px-3 py-2 bg-slate-100/70 border border-border/50 rounded-lg text-xs text-muted-foreground hover:text-foreground transition-colors">
                             <ExternalLinkIcon className="w-3 h-3" /> 전체 보기
                           </button>
                         </div>

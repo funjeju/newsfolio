@@ -10,11 +10,11 @@ export function YesterdayCardNews() {
         <h3 className="font-semibold text-lg flex items-center gap-2">
           오늘의 카드뉴스
         </h3>
-        <span className="text-xs font-mono bg-white/10 px-2 py-1 rounded">1/5</span>
+        <span className="text-xs font-mono bg-slate-100 px-2 py-1 rounded">1/5</span>
       </div>
 
       <div className="relative z-10 flex-1 flex flex-col justify-center items-center gap-4 py-4">
-        <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-muted-foreground group-hover:scale-110 transition-transform duration-500">
+        <div className="w-16 h-16 rounded-2xl bg-slate-100/70 border border-white/10 flex items-center justify-center text-muted-foreground group-hover:scale-110 transition-transform duration-500">
           <ImageIcon className="w-8 h-8" />
         </div>
         <div className="text-center">

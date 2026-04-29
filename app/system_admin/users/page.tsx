@@ -84,7 +84,7 @@ export default function SystemAdminUsersPage() {
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="이름, 이메일, 학교로 검색"
-            className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
+            className="w-full pl-10 pr-4 py-2.5 bg-slate-100/70 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
           />
         </div>
         <div className="flex gap-2 flex-wrap">
@@ -94,7 +94,7 @@ export default function SystemAdminUsersPage() {
               onClick={() => setRoleFilter(opt)}
               className={cn(
                 "px-3 py-2 rounded-xl text-xs font-semibold transition-colors",
-                roleFilter === opt ? "bg-red-500/20 text-red-300 border border-red-500/30" : "bg-white/5 text-muted-foreground hover:bg-white/10"
+                roleFilter === opt ? "bg-red-500/20 text-red-300 border border-red-500/30" : "bg-slate-100/70 text-muted-foreground hover:bg-slate-100"
               )}
             >
               {ROLE_FILTER_LABELS[opt]}
@@ -126,7 +126,7 @@ export default function SystemAdminUsersPage() {
                 className="grid grid-cols-1 md:grid-cols-[1fr_1.5fr_auto_auto_auto_auto] gap-2 md:gap-4 px-5 py-4 items-center"
               >
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center shrink-0">
                     {u.role === "system_admin" ? <ShieldCheckIcon className="w-4 h-4 text-red-400" /> : <UserIcon className="w-4 h-4 text-muted-foreground" />}
                   </div>
                   <span className="font-semibold text-sm">{u.displayName}</span>
@@ -150,7 +150,7 @@ export default function SystemAdminUsersPage() {
                   {u.status === "active" && u.role !== "system_admin" && (
                     <button
                       onClick={() => toast.success(`${u.displayName} 계정이 정지됐어요.`)}
-                      className="p-1.5 rounded-lg bg-white/5 hover:bg-red-500/10 text-muted-foreground hover:text-red-400 transition-colors"
+                      className="p-1.5 rounded-lg bg-slate-100/70 hover:bg-red-500/10 text-muted-foreground hover:text-red-400 transition-colors"
                     >
                       <BanIcon className="w-3.5 h-3.5" />
                     </button>
@@ -165,7 +165,7 @@ export default function SystemAdminUsersPage() {
                   )}
                   <button
                     onClick={() => toast.info(`${u.displayName} 비밀번호 재설정 이메일이 발송됐어요.`)}
-                    className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-muted-foreground transition-colors"
+                    className="p-1.5 rounded-lg bg-slate-100/70 hover:bg-slate-100 text-muted-foreground transition-colors"
                   >
                     <KeyRoundIcon className="w-3.5 h-3.5" />
                   </button>

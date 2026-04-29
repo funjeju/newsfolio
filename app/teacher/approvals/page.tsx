@@ -93,17 +93,17 @@ export default function TeacherApprovalsPage() {
           오늘 종합 현황
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-center">
-          <div className="bg-white/5 rounded-xl p-3">
+          <div className="bg-slate-100/70 rounded-xl p-3">
             <div className="text-2xl font-bold text-brand-400">{objections.length}</div>
             <div className="text-xs text-muted-foreground mt-1">이의제기 대기</div>
           </div>
-          <div className="bg-white/5 rounded-xl p-3">
+          <div className="bg-slate-100/70 rounded-xl p-3">
             <div className="text-2xl font-bold text-emerald-400">
               {isLoading ? "-" : 0}
             </div>
             <div className="text-xs text-muted-foreground mt-1">오늘 처리 완료</div>
           </div>
-          <div className="bg-white/5 rounded-xl p-3">
+          <div className="bg-slate-100/70 rounded-xl p-3">
             <div className="text-2xl font-bold text-orange-400">{transactions.length}</div>
             <div className="text-xs text-muted-foreground mt-1">포지션 변경</div>
           </div>
@@ -203,7 +203,7 @@ export default function TeacherApprovalsPage() {
                         {/* Logic */}
                         <div>
                           <h4 className="text-sm font-semibold mb-2">학생 논리</h4>
-                          <div className="space-y-2 text-sm text-muted-foreground bg-white/5 rounded-xl p-4">
+                          <div className="space-y-2 text-sm text-muted-foreground bg-slate-100/70 rounded-xl p-4">
                             {obj.logic.why && <p><span className="font-semibold text-foreground">왜?</span> {obj.logic.why}</p>}
                             {obj.logic.keyEvidence && <p><span className="font-semibold text-foreground">핵심 근거:</span> {obj.logic.keyEvidence}</p>}
                             {obj.logic.counterAcknowledgment && <p><span className="font-semibold text-foreground">반대 인정:</span> {obj.logic.counterAcknowledgment}</p>}
@@ -250,7 +250,7 @@ export default function TeacherApprovalsPage() {
                             onChange={e => setComments(prev => ({ ...prev, [obj.id]: e.target.value }))}
                             rows={2}
                             placeholder="학생에게 전달할 피드백..."
-                            className="w-full p-3 bg-white/5 border border-border/50 rounded-xl text-sm resize-none focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
+                            className="w-full p-3 bg-slate-100/70 border border-border/50 rounded-xl text-sm resize-none focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
                           />
                         </div>
 
@@ -319,7 +319,7 @@ export default function TeacherApprovalsPage() {
                   </div>
                   {/* Before → After */}
                   <div className="grid grid-cols-2 gap-3 text-sm">
-                    <div className="bg-white/5 rounded-xl p-3">
+                    <div className="bg-slate-100/70 rounded-xl p-3">
                       <p className="text-xs text-muted-foreground mb-2">변경 전</p>
                       {tx.before.map(a => (
                         <div key={a.sectorId} className="flex justify-between">
@@ -339,7 +339,7 @@ export default function TeacherApprovalsPage() {
                     </div>
                   </div>
                   {tx.rationale && (
-                    <p className="text-sm text-muted-foreground bg-white/5 rounded-xl p-3 italic">
+                    <p className="text-sm text-muted-foreground bg-slate-100/70 rounded-xl p-3 italic">
                       "{tx.rationale}"
                     </p>
                   )}
@@ -350,7 +350,7 @@ export default function TeacherApprovalsPage() {
                       onChange={e => setTxComments(prev => ({ ...prev, [tx.id]: e.target.value }))}
                       rows={2}
                       placeholder="학생에게 전달할 피드백..."
-                      className="w-full p-3 bg-white/5 border border-border/50 rounded-xl text-sm resize-none focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
+                      className="w-full p-3 bg-slate-100/70 border border-border/50 rounded-xl text-sm resize-none focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
                     />
                   </div>
                   <div className="flex gap-3">

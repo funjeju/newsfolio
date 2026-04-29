@@ -34,7 +34,7 @@ function ThreeDotMeter({ filled, total, colorClass }: { filled: number; total: n
   return (
     <div className="flex gap-1">
       {Array(total).fill(null).map((_, i) => (
-        <div key={i} className={cn("w-2.5 h-2.5 rounded-full", i < filled ? colorClass : "bg-white/10")} />
+        <div key={i} className={cn("w-2.5 h-2.5 rounded-full", i < filled ? colorClass : "bg-slate-100")} />
       ))}
     </div>
   );
@@ -110,7 +110,7 @@ export function SectorCard({ impact, index }: Props) {
       </div>
 
       {/* AI Rationale */}
-      <p className="text-sm text-muted-foreground bg-white/5 rounded-xl p-3 leading-relaxed mb-4">
+      <p className="text-sm text-muted-foreground bg-slate-100/70 rounded-xl p-3 leading-relaxed mb-4">
         {impact.tonedRationale}
       </p>
 
@@ -118,7 +118,7 @@ export function SectorCard({ impact, index }: Props) {
       <div className="flex gap-2">
         <button
           onClick={e => { e.stopPropagation(); router.push(`/student/sector/${impact.sectorId}`); }}
-          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-sm font-medium transition-colors"
+          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg bg-slate-100/70 hover:bg-slate-100 text-sm font-medium transition-colors"
         >
           <SearchIcon className="w-4 h-4" />
           AI 분석 보기
@@ -129,7 +129,7 @@ export function SectorCard({ impact, index }: Props) {
             "flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-sm font-medium transition-colors",
             impact.objectionCount > 0
               ? "bg-brand-500/20 text-brand-300 hover:bg-brand-500/30"
-              : "bg-white/5 hover:bg-white/10"
+              : "bg-slate-100/70 hover:bg-slate-100"
           )}
         >
           <MessageSquarePlusIcon className="w-4 h-4" />
@@ -138,7 +138,7 @@ export function SectorCard({ impact, index }: Props) {
         </button>
         <button
           onClick={e => { e.stopPropagation(); router.push(`/student/sector/${impact.sectorId}?tab=learn`); }}
-          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-sm font-medium transition-colors"
+          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg bg-slate-100/70 hover:bg-slate-100 text-sm font-medium transition-colors"
         >
           <BookOpenIcon className="w-4 h-4" />
           학습

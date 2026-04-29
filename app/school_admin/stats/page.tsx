@@ -139,7 +139,7 @@ export default function SchoolAdminStatsPage() {
               className="flex items-center gap-3"
             >
               <span className="text-sm font-semibold w-8 text-center">{row.class}</span>
-              <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
+              <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-brand-400 rounded-full transition-all"
                   style={{ width: `${(row.approved / row.total) * 100}%` }}

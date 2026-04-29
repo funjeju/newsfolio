@@ -52,7 +52,7 @@ function StepIndicator({ current, total }: { current: number; total: number }) {
             "h-1.5 rounded-full transition-all",
             i + 1 < current ? "w-8 bg-brand-500" :
             i + 1 === current ? "w-12 bg-brand-400" :
-            "w-8 bg-white/10"
+            "w-8 bg-slate-100"
           )}
         />
       ))}
@@ -221,13 +221,13 @@ export default function TeacherSetupPage() {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <label className="text-sm font-semibold">학년</label>
-                <select value={grade} onChange={e => { setGrade(e.target.value); handleAutoDetectTone(); }} className="w-full p-3 bg-white/5 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50">
+                <select value={grade} onChange={e => { setGrade(e.target.value); handleAutoDetectTone(); }} className="w-full p-3 bg-slate-100/70 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50">
                   {["1","2","3","4","5","6","7","8","9"].map(g => <option key={g} value={g}>{g}학년</option>)}
                 </select>
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-semibold">반</label>
-                <select value={classNum} onChange={e => setClassNum(e.target.value)} className="w-full p-3 bg-white/5 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50">
+                <select value={classNum} onChange={e => setClassNum(e.target.value)} className="w-full p-3 bg-slate-100/70 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50">
                   {["1","2","3","4","5","6","7","8","9","10"].map(n => <option key={n} value={n}>{n}반</option>)}
                 </select>
               </div>
@@ -245,7 +245,7 @@ export default function TeacherSetupPage() {
                     onClick={() => setToneLevel(t.level)}
                     className={cn(
                       "p-3 rounded-xl border text-left transition-all",
-                      toneLevel === t.level ? "bg-brand-500/20 border-brand-500 text-brand-300" : "bg-white/5 border-border/50 hover:border-white/20"
+                      toneLevel === t.level ? "bg-brand-500/20 border-brand-500 text-brand-300" : "bg-slate-100/70 border-border/50 hover:border-white/20"
                     )}
                   >
                     <div className="font-bold text-sm">Tone {t.level}</div>
@@ -253,7 +253,7 @@ export default function TeacherSetupPage() {
                   </button>
                 ))}
               </div>
-              <div className="text-sm text-muted-foreground bg-white/5 rounded-xl p-3">
+              <div className="text-sm text-muted-foreground bg-slate-100/70 rounded-xl p-3">
                 선택된 톤: <span className="font-bold text-foreground">Tone {toneLevel} — {TONES[toneLevel - 1].label}</span>
               </div>
             </div>
@@ -278,7 +278,7 @@ export default function TeacherSetupPage() {
                   onClick={() => toggleSector(s.id)}
                   className={cn(
                     "flex items-center gap-2 p-3 rounded-xl border text-sm font-medium transition-all",
-                    activeSectors.includes(s.id) ? "bg-brand-500/20 border-brand-500 text-brand-300" : "bg-white/5 border-border/50 hover:border-white/20 text-muted-foreground"
+                    activeSectors.includes(s.id) ? "bg-brand-500/20 border-brand-500 text-brand-300" : "bg-slate-100/70 border-border/50 hover:border-white/20 text-muted-foreground"
                   )}
                 >
                   <span className="text-lg">{s.icon}</span>
@@ -307,7 +307,7 @@ export default function TeacherSetupPage() {
                   type={field.type}
                   value={field.value}
                   onChange={e => field.onChange(e.target.value)}
-                  className="w-full p-3 bg-white/5 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50"
+                  className="w-full p-3 bg-slate-100/70 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50"
                 />
               </div>
             ))}
@@ -325,7 +325,7 @@ export default function TeacherSetupPage() {
                 { id: "leader", label: "조장만 신청 가능" },
                 { id: "anyone", label: "조원 누구나 신청 가능" },
               ].map(opt => (
-                <button key={opt.id} onClick={() => setChangeMode(opt.id as any)} className={cn("w-full flex items-center gap-3 p-3 rounded-xl border transition-all text-sm font-medium", changeMode === opt.id ? "bg-brand-500/20 border-brand-500 text-brand-300" : "bg-white/5 border-border/50")}>
+                <button key={opt.id} onClick={() => setChangeMode(opt.id as any)} className={cn("w-full flex items-center gap-3 p-3 rounded-xl border transition-all text-sm font-medium", changeMode === opt.id ? "bg-brand-500/20 border-brand-500 text-brand-300" : "bg-slate-100/70 border-border/50")}>
                   <div className={cn("w-4 h-4 rounded-full border-2", changeMode === opt.id ? "bg-brand-500 border-brand-500" : "border-muted-foreground")} />
                   {opt.label}
                 </button>
@@ -339,7 +339,7 @@ export default function TeacherSetupPage() {
                 { id: "auto", label: "AI 자동 승인", desc: "AI가 기준에 맞는 항목을 자동 처리해요" },
                 { id: "hybrid", label: "혼합 (큰 변동만 교사)", desc: "±3 이상의 점수 변동만 교사 확인" },
               ].map(opt => (
-                <button key={opt.id} onClick={() => setConfirmMode(opt.id as any)} className={cn("w-full flex items-start gap-3 p-3 rounded-xl border transition-all text-left", confirmMode === opt.id ? "bg-brand-500/20 border-brand-500" : "bg-white/5 border-border/50")}>
+                <button key={opt.id} onClick={() => setConfirmMode(opt.id as any)} className={cn("w-full flex items-start gap-3 p-3 rounded-xl border transition-all text-left", confirmMode === opt.id ? "bg-brand-500/20 border-brand-500" : "bg-slate-100/70 border-border/50")}>
                   <div className={cn("w-4 h-4 rounded-full border-2 mt-0.5 flex-shrink-0", confirmMode === opt.id ? "bg-brand-500 border-brand-500" : "border-muted-foreground")} />
                   <div>
                     <div className={cn("font-semibold text-sm", confirmMode === opt.id ? "text-brand-300" : "text-foreground")}>{opt.label}</div>
@@ -368,7 +368,7 @@ export default function TeacherSetupPage() {
                 { id: "code", label: "학급 코드 발급", desc: "학생이 코드로 직접 가입", icon: "🔑" },
                 { id: "excel", label: "엑셀 업로드", desc: "명단 파일로 일괄 등록", icon: "📋" },
               ].map(opt => (
-                <button key={opt.id} onClick={() => setStudentRegistration(opt.id as any)} className={cn("p-4 rounded-xl border text-left transition-all space-y-2", studentRegistration === opt.id ? "bg-brand-500/20 border-brand-500" : "bg-white/5 border-border/50")}>
+                <button key={opt.id} onClick={() => setStudentRegistration(opt.id as any)} className={cn("p-4 rounded-xl border text-left transition-all space-y-2", studentRegistration === opt.id ? "bg-brand-500/20 border-brand-500" : "bg-slate-100/70 border-border/50")}>
                   <div className="text-2xl">{opt.icon}</div>
                   <div className={cn("font-bold text-sm", studentRegistration === opt.id ? "text-brand-300" : "")}>{opt.label}</div>
                   <div className="text-xs text-muted-foreground">{opt.desc}</div>
@@ -377,7 +377,7 @@ export default function TeacherSetupPage() {
             </div>
 
             {studentRegistration === "code" && (
-              <div className="bg-white/5 rounded-xl p-4 space-y-3">
+              <div className="bg-slate-100/70 rounded-xl p-4 space-y-3">
                 <p className="text-sm font-semibold">학급 코드</p>
                 <div className="flex items-center gap-3">
                   <div className="flex-1 text-3xl font-bold font-mono tracking-widest text-brand-300">{classCode}</div>
@@ -412,7 +412,7 @@ export default function TeacherSetupPage() {
                   <span className="font-bold">{groupSize}명</span>
                 </div>
               </div>
-              <div className="bg-white/5 rounded-xl p-3 text-sm text-muted-foreground">
+              <div className="bg-slate-100/70 rounded-xl p-3 text-sm text-muted-foreground">
                 학생 24명 ÷ 조당 {groupSize}명 = <span className="font-bold text-foreground">{totalGroups}조</span>
               </div>
             </div>
@@ -430,7 +430,7 @@ export default function TeacherSetupPage() {
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   {Array(totalGroups).fill(null).map((_, i) => (
-                    <div key={i} className="bg-white/5 rounded-xl p-3 border border-border/50 text-sm">
+                    <div key={i} className="bg-slate-100/70 rounded-xl p-3 border border-border/50 text-sm">
                       <div className="font-bold mb-1">{i + 1}조</div>
                       <div className="text-muted-foreground text-xs">{groupSize}명</div>
                     </div>
@@ -456,7 +456,7 @@ export default function TeacherSetupPage() {
                   onClick={() => toggleDomain(d.id)}
                   className={cn(
                     "flex items-center gap-2 p-3 rounded-xl border text-sm font-medium transition-all",
-                    activeDomains.includes(d.id) ? "bg-brand-500/20 border-brand-500 text-brand-300" : "bg-white/5 border-border/50 text-muted-foreground"
+                    activeDomains.includes(d.id) ? "bg-brand-500/20 border-brand-500 text-brand-300" : "bg-slate-100/70 border-border/50 text-muted-foreground"
                   )}
                 >
                   <span>{d.icon}</span>
@@ -465,7 +465,7 @@ export default function TeacherSetupPage() {
                 </button>
               ))}
             </div>
-            <div className="text-sm text-muted-foreground bg-white/5 rounded-xl p-3">
+            <div className="text-sm text-muted-foreground bg-slate-100/70 rounded-xl p-3">
               {activeDomains.length}개 사이트 활성화. 학생은 이 사이트의 기사만 출처로 제출할 수 있어요. 시작 후 더 추가할 수 있어요.
             </div>
           </motion.div>

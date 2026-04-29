@@ -31,7 +31,7 @@ const MOCK_TEACHERS: MockTeacher[] = [
 
 const STATUS_STYLE = {
   active:   { label: "활성",    color: "text-score-up bg-score-up/10" },
-  inactive: { label: "비활성",  color: "text-muted-foreground bg-white/5" },
+  inactive: { label: "비활성",  color: "text-muted-foreground bg-slate-100/70" },
   pending:  { label: "승인 대기", color: "text-yellow-400 bg-yellow-500/10" },
 };
 
@@ -92,7 +92,7 @@ export default function SchoolAdminTeachersPage() {
               onChange={e => setInviteEmail(e.target.value)}
               placeholder="teacher@school.kr"
               type="email"
-              className="flex-1 p-3 bg-white/5 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
+              className="flex-1 p-3 bg-slate-100/70 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
             />
             <button
               onClick={handleInvite}
@@ -112,7 +112,7 @@ export default function SchoolAdminTeachersPage() {
           value={search}
           onChange={e => setSearch(e.target.value)}
           placeholder="이름 또는 이메일로 검색"
-          className="w-full pl-10 pr-4 py-3 bg-white/5 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
+          className="w-full pl-10 pr-4 py-3 bg-slate-100/70 border border-border/50 rounded-xl text-sm focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
         />
       </div>
 
@@ -120,7 +120,7 @@ export default function SchoolAdminTeachersPage() {
       <div className="glass rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-white/5 text-muted-foreground text-xs uppercase tracking-wider">
+            <thead className="bg-slate-100/70 text-muted-foreground text-xs uppercase tracking-wider">
               <tr>
                 <th className="px-5 py-3 text-left">교사</th>
                 <th className="px-5 py-3 text-left">이메일</th>
@@ -139,7 +139,7 @@ export default function SchoolAdminTeachersPage() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: i * 0.04 }}
-                    className="hover:bg-white/5 transition-colors"
+                    className="hover:bg-slate-100/70 transition-colors"
                   >
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-3">
@@ -154,7 +154,7 @@ export default function SchoolAdminTeachersPage() {
                       {teacher.classes.length > 0 ? (
                         <div className="flex flex-wrap gap-1">
                           {teacher.classes.map(c => (
-                            <span key={c} className="text-[10px] px-1.5 py-0.5 bg-white/10 rounded text-muted-foreground">{c}</span>
+                            <span key={c} className="text-[10px] px-1.5 py-0.5 bg-slate-100 rounded text-muted-foreground">{c}</span>
                           ))}
                         </div>
                       ) : (
@@ -188,7 +188,7 @@ export default function SchoolAdminTeachersPage() {
                           </button>
                         )}
                         <button
-                          className="p-1.5 rounded-lg bg-white/5 text-muted-foreground hover:bg-white/10 transition-colors"
+                          className="p-1.5 rounded-lg bg-slate-100/70 text-muted-foreground hover:bg-slate-100 transition-colors"
                           title="권한 관리"
                         >
                           <ShieldIcon className="w-4 h-4" />

@@ -155,7 +155,7 @@ export default function StudentPortfolioPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 bg-white/5 p-1 rounded-xl">
+      <div className="flex gap-1 bg-slate-100/70 p-1 rounded-xl">
         {(["chart", "allocations", "history"] as const).map(t => (
           <button
             key={t}
@@ -292,7 +292,7 @@ export default function StudentPortfolioPage() {
                   onChange={e => setRationale(e.target.value)}
                   rows={3}
                   placeholder="예: 최근 AI 서버 수요로 반도체 모멘텀이 강해서 비중을 높이고..."
-                  className="w-full p-3 bg-white/5 border border-border/50 rounded-xl text-sm resize-none focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
+                  className="w-full p-3 bg-slate-100/70 border border-border/50 rounded-xl text-sm resize-none focus:outline-none focus:border-brand-500/50 placeholder:text-muted-foreground/50"
                 />
                 <button
                   onClick={submitChanges}
@@ -344,7 +344,7 @@ export default function StudentPortfolioPage() {
                   <div className="flex items-center gap-2 text-xs flex-wrap">
                     <div className="flex gap-1 flex-wrap">
                       {tx.before.map(a => (
-                        <span key={a.sectorId} className="px-2 py-0.5 bg-white/5 rounded text-muted-foreground">
+                        <span key={a.sectorId} className="px-2 py-0.5 bg-slate-100/70 rounded text-muted-foreground">
                           {a.sectorId} {Math.round(a.weight * 100)}%
                         </span>
                       ))}
@@ -359,7 +359,7 @@ export default function StudentPortfolioPage() {
                     </div>
                   </div>
                   {tx.rationale && (
-                    <p className="text-xs text-muted-foreground bg-white/5 rounded-xl p-3 italic">
+                    <p className="text-xs text-muted-foreground bg-slate-100/70 rounded-xl p-3 italic">
                       "{tx.rationale}"
                     </p>
                   )}
