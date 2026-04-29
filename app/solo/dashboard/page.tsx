@@ -1,9 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import {
   TrendingUpIcon, TrendingDownIcon, ArrowRightIcon,
-  NewspaperIcon, CalendarIcon, ZapIcon, TrophyIcon,
+  NewspaperIcon, ZapIcon, TrophyIcon, ExternalLinkIcon,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { AreaChart, Area, ResponsiveContainer } from "recharts";
@@ -26,13 +27,42 @@ const MOCK_TODAY_MOVERS = [
   { name: "바이오", icon: "🧬", return: -0.8, rank: 7 },
 ];
 
-const MOCK_NEWS = [
-  { title: "삼성전자, HBM4 양산 속도 높여 엔비디아 공급 본격화", source: "조선비즈", time: "오전 7:30" },
-  { title: "코스피, 美 빅테크 실적 호조에 장중 2% 상승", source: "한국경제", time: "오전 9:15" },
+const MOCK_SECTOR_NEWS = [
+  {
+    id: "semi", name: "반도체", icon: "💻", todayReturn: 2.1,
+    news: [
+      { title: "삼성전자, HBM4 양산 속도 높여 엔비디아 공급 본격화", source: "조선비즈", time: "오전 7:30", url: "https://biz.chosun.com" },
+      { title: "미국 상무부, 반도체 수출 규제 일부 완화…HBM 포함", source: "한국경제", time: "오전 8:10", url: "https://www.hankyung.com" },
+      { title: "SK하이닉스, AI 서버용 HBM3E 글로벌 공급 계약 체결", source: "전자신문", time: "오전 9:00", url: "https://www.etnews.com" },
+    ],
+  },
+  {
+    id: "defense", name: "방산", icon: "🛡️", todayReturn: 1.8,
+    news: [
+      { title: "한화에어로스페이스, 폴란드 자주포 추가 수출 계약 체결", source: "연합뉴스", time: "오전 8:45", url: "https://www.yna.co.kr" },
+      { title: "K-방산 수출액 역대 최고 경신…중동·유럽 수요 급증", source: "국방일보", time: "오전 10:20", url: "https://kookbang.dema.mil.kr" },
+    ],
+  },
+  {
+    id: "bio", name: "바이오", icon: "🧬", todayReturn: -0.8,
+    news: [
+      { title: "셀트리온, 램시마 SC 미국 시장점유율 15% 돌파", source: "바이오스펙테이터", time: "오전 9:15", url: "https://www.biospectator.com" },
+      { title: "국내 바이오 임상 3상 실패율 증가…투자심리 위축", source: "매일경제", time: "오전 11:00", url: "https://www.mk.co.kr" },
+      { title: "글로벌 제약사 M&A 활발…국내 바이오텍 인수 타깃 부상", source: "한국경제", time: "오후 1:30", url: "https://www.hankyung.com" },
+    ],
+  },
+  {
+    id: "fin", name: "금융", icon: "🏦", todayReturn: 0.5,
+    news: [
+      { title: "한국은행, 기준금리 동결…올해 인하 가능성 열어둬", source: "연합뉴스", time: "오전 10:00", url: "https://www.yna.co.kr" },
+      { title: "4대 은행 1분기 순이익 5조 원 돌파…사상 최대", source: "조선비즈", time: "오전 11:30", url: "https://biz.chosun.com" },
+    ],
+  },
 ];
 
 export default function SoloDashboard() {
   const { user } = useUser();
+  const [activeNewsTab, setActiveNewsTab] = useState(MOCK_SECTOR_NEWS[0].id);
   const currentValue = 1000000;
   const startValue = 1000000;
   const cumReturn = 0;
@@ -208,21 +238,59 @@ export default function SoloDashboard() {
         </div>
       </div>
 
-      {/* Today's News */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
-        <h2 className="font-bold text-slate-700 text-sm flex items-center gap-2 mb-4">
-          <NewspaperIcon className="w-4 h-4 text-indigo-500" />
-          오늘의 주요 뉴스
-        </h2>
-        <div className="space-y-2">
-          {MOCK_NEWS.map((n, i) => (
-            <div key={i} className="flex items-start gap-3 px-3 py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors">
-              <CalendarIcon className="w-4 h-4 text-slate-400 mt-0.5 flex-shrink-0" />
+      {/* Today's News — 섹터별 탭 */}
+      <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+        {/* 헤더 */}
+        <div className="px-5 pt-4 pb-0">
+          <h2 className="font-bold text-slate-700 text-sm flex items-center gap-2 mb-3">
+            <NewspaperIcon className="w-4 h-4 text-indigo-500" />
+            오늘의 주요 뉴스
+          </h2>
+          {/* 섹터 탭 */}
+          <div className="flex gap-1 overflow-x-auto pb-0 scrollbar-none">
+            {MOCK_SECTOR_NEWS.map(s => (
+              <button
+                key={s.id}
+                onClick={() => setActiveNewsTab(s.id)}
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-1.5 rounded-t-lg text-xs font-bold whitespace-nowrap transition-all border-b-2",
+                  activeNewsTab === s.id
+                    ? "bg-slate-50 border-indigo-500 text-indigo-700"
+                    : "border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50"
+                )}
+              >
+                <span>{s.icon}</span>
+                <span>{s.name}</span>
+                <span className={cn(
+                  "text-[10px] font-bold",
+                  s.todayReturn >= 0 ? "text-emerald-600" : "text-red-500"
+                )}>
+                  {s.todayReturn >= 0 ? "+" : ""}{s.todayReturn.toFixed(1)}%
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* 뉴스 목록 */}
+        <div className="bg-slate-50 border-t border-slate-100 divide-y divide-slate-100">
+          {MOCK_SECTOR_NEWS.find(s => s.id === activeNewsTab)?.news.map((n, i) => (
+            <a
+              key={i}
+              href={n.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-start gap-3 px-5 py-3 hover:bg-slate-100 transition-colors group"
+            >
+              <span className="text-xs font-bold text-slate-400 mt-0.5 w-4 flex-shrink-0">{i + 1}</span>
               <div className="flex-1 min-w-0">
-                <div className="text-sm font-medium text-slate-700 line-clamp-1">{n.title}</div>
+                <div className="text-sm font-medium text-slate-700 group-hover:text-indigo-600 transition-colors line-clamp-2">
+                  {n.title}
+                </div>
                 <div className="text-xs text-slate-400 mt-0.5">{n.source} · {n.time}</div>
               </div>
-            </div>
+              <ExternalLinkIcon className="w-3.5 h-3.5 text-slate-300 group-hover:text-indigo-400 transition-colors flex-shrink-0 mt-0.5" />
+            </a>
           ))}
         </div>
       </div>
