@@ -52,6 +52,7 @@ async function fetchNaverNews(
     title: item.title.replace(/<[^>]+>/g, ""),
     summary: item.description.replace(/<[^>]+>/g, ""),
     source: item.originallink?.match(/\/\/([^/]+)/)?.[1]?.replace("www.", "") ?? "",
+    url: item.originallink ?? item.link ?? "",
     publishedAt: item.pubDate,
   }));
 }
@@ -64,6 +65,7 @@ interface ScoreResult {
   duration: "short" | "medium" | "long";
   risk: "low" | "mid" | "high";
   rationale: string;
+  newsItems: { title: string; summary: string; source: string; url: string; publishedAt: string }[];
 }
 
 async function generateImpactScore(
@@ -105,10 +107,11 @@ async function generateImpactScore(
       duration: parsed.duration ?? "short",
       risk: parsed.risk ?? "mid",
       rationale: parsed.rationale ?? "",
+      newsItems,
     };
   } catch (err) {
     console.error(`[daily/run] Impact score failed for ${sectorId}:`, err);
-    return { sectorId, impactScore: 0, dailyReturn: 0, duration: "short", risk: "mid", rationale: "" };
+    return { sectorId, impactScore: 0, dailyReturn: 0, duration: "short", risk: "mid", rationale: "", newsItems: [] };
   }
 }
 
@@ -202,12 +205,24 @@ export async function GET(req: NextRequest) {
 
     runLog.push(`Impact scores: ${sectorScores.map(s => `${s.sectorId}:${s.impactScore}`).join(", ")}`);
 
-    // 7. publicScores 저장
+    // 7. publicScores 저장 (sectorNews 포함)
+    const sectorNews: Record<string, { title: string; summary: string; source: string; url: string; publishedAt: string }[]> = {};
+    for (const r of rawScores) {
+      sectorNews[r.sectorId] = r.newsItems.map(n => ({
+        title: n.title,
+        summary: n.summary,
+        source: n.source,
+        url: n.url,
+        publishedAt: n.publishedAt,
+      }));
+    }
+
     await db.collection("publicScores").doc(date).set({
       id: date,
       date,
       toneLevel: 3,
       sectorScores,
+      sectorNews,
       headline: "",                         // 아래에서 업데이트
       generatedAt: FieldValue.serverTimestamp(),
       publishedAt: FieldValue.serverTimestamp(),

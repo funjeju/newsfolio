@@ -273,12 +273,15 @@ export default function PublicLeaderboardPage() {
                         <span className="text-[10px] font-bold text-amber-600 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded-full mr-1.5">
                           {news.sectorIcon} {news.sectorName}
                         </span>
-                        <h3 className={cn(
-                          "font-bold text-slate-800 leading-snug mt-1",
-                          idx === 0 ? "text-base md:text-lg" : "text-sm"
-                        )}>
-                          {news.headline}
-                        </h3>
+                        <a href={news.url} target="_blank" rel="noopener noreferrer" className="group">
+                          <h3 className={cn(
+                            "font-bold text-slate-800 leading-snug mt-1 group-hover:text-amber-700 transition-colors",
+                            idx === 0 ? "text-base md:text-lg" : "text-sm"
+                          )}>
+                            {news.headline}
+                            <ExternalLinkIcon className="inline w-3 h-3 ml-1 text-slate-300 group-hover:text-amber-500 transition-colors" />
+                          </h3>
+                        </a>
                         {idx === 0 && (
                           <p className="text-sm text-slate-500 leading-relaxed mt-1.5">{news.summary}</p>
                         )}
@@ -291,23 +294,23 @@ export default function PublicLeaderboardPage() {
                       +{news.dailyReturn.toFixed(2)}%
                     </span>
                   </div>
-                  <div className="flex items-center justify-between pl-7">
+                  <div className="pl-7">
                     <div className="flex items-center gap-1.5 text-xs text-slate-400">
                       <span className="font-semibold text-indigo-600">{news.source}</span>
                       <span>·</span>
                       <span>{news.time}</span>
                     </div>
-                    <a
-                      href={news.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-xs font-bold text-amber-600 hover:text-amber-800 transition-colors"
-                    >
-                      보기 <ExternalLinkIcon className="w-3 h-3" />
-                    </a>
                   </div>
                 </div>
               ))}
+              <div className="px-5 py-3 bg-amber-50/60">
+                <Link
+                  href="/news"
+                  className="flex items-center justify-center gap-1.5 text-sm font-bold text-amber-700 hover:text-amber-900 transition-colors"
+                >
+                  섹터별 뉴스 전체 보기 <ArrowRightIcon className="w-4 h-4" />
+                </Link>
+              </div>
             </div>
           </motion.div>
 
@@ -414,12 +417,15 @@ export default function PublicLeaderboardPage() {
                         <span className="text-[10px] font-bold text-rose-600 bg-rose-50 border border-rose-200 px-1.5 py-0.5 rounded-full mr-1.5">
                           {news.sectorIcon} {news.sectorName}
                         </span>
-                        <h3 className={cn(
-                          "font-bold text-slate-800 leading-snug mt-1",
-                          idx === 0 ? "text-base md:text-lg" : "text-sm"
-                        )}>
-                          {news.headline}
-                        </h3>
+                        <a href={news.url} target="_blank" rel="noopener noreferrer" className="group">
+                          <h3 className={cn(
+                            "font-bold text-slate-800 leading-snug mt-1 group-hover:text-rose-700 transition-colors",
+                            idx === 0 ? "text-base md:text-lg" : "text-sm"
+                          )}>
+                            {news.headline}
+                            <ExternalLinkIcon className="inline w-3 h-3 ml-1 text-slate-300 group-hover:text-rose-400 transition-colors" />
+                          </h3>
+                        </a>
                         {idx === 0 && (
                           <p className="text-sm text-slate-500 leading-relaxed mt-1.5">{news.summary}</p>
                         )}
@@ -432,23 +438,23 @@ export default function PublicLeaderboardPage() {
                       {news.dailyReturn.toFixed(2)}%
                     </span>
                   </div>
-                  <div className="flex items-center justify-between pl-7">
+                  <div className="pl-7">
                     <div className="flex items-center gap-1.5 text-xs text-slate-400">
                       <span className="font-semibold text-indigo-600">{news.source}</span>
                       <span>·</span>
                       <span>{news.time}</span>
                     </div>
-                    <a
-                      href={news.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-xs font-bold text-rose-600 hover:text-rose-800 transition-colors"
-                    >
-                      보기 <ExternalLinkIcon className="w-3 h-3" />
-                    </a>
                   </div>
                 </div>
               ))}
+              <div className="px-5 py-3 bg-rose-50/60">
+                <Link
+                  href="/news"
+                  className="flex items-center justify-center gap-1.5 text-sm font-bold text-rose-700 hover:text-rose-900 transition-colors"
+                >
+                  섹터별 뉴스 전체 보기 <ArrowRightIcon className="w-4 h-4" />
+                </Link>
+              </div>
             </div>
           </motion.div>
 

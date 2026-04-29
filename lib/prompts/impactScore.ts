@@ -10,6 +10,7 @@ export interface ImpactScoreInput {
     title: string;
     summary: string;
     source: string;
+    url: string;
     publishedAt: string;
   }[];
   previousScore?: number;
