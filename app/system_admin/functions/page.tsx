@@ -3,10 +3,11 @@
 import * as motion from "framer-motion/client";
 import {
   ServerIcon, CheckCircle2Icon, AlertCircleIcon, XCircleIcon,
-  ClockIcon, RefreshCwIcon, ZapIcon,
+  ClockIcon, RefreshCwIcon, ZapIcon, PlayIcon, FlameIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { useState } from "react";
 
 type FnStatus = "ok" | "warning" | "error";
 
@@ -57,6 +58,32 @@ export default function SystemAdminFunctionsPage() {
   const warnCount = MOCK_FUNCTIONS.filter(f => f.status === "warning").length;
   const errCount = MOCK_FUNCTIONS.filter(f => f.status === "error").length;
 
+  const [force, setForce] = useState(false);
+  const [running, setRunning] = useState(false);
+  const [result, setResult] = useState<any>(null);
+
+  const handleRun = async () => {
+    setRunning(true);
+    setResult(null);
+    try {
+      const res = await fetch("/api/admin/daily-run", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ force }),
+      });
+      const data = await res.json();
+      setResult({ ok: res.ok, status: res.status, data });
+      if (res.ok && !data.skipped) toast.success("Daily run 완료!");
+      else if (data.skipped) toast.info("이미 오늘 데이터가 있어요. 강제 실행을 켜보세요.");
+      else toast.error("실행 중 오류가 발생했어요.");
+    } catch (e: any) {
+      setResult({ ok: false, error: e.message });
+      toast.error("요청 실패");
+    } finally {
+      setRunning(false);
+    }
+  };
+
   return (
     <div className="space-y-6 pb-10">
       <div className="flex items-start justify-between">
@@ -80,6 +107,57 @@ export default function SystemAdminFunctionsPage() {
           <RefreshCwIcon className="w-4 h-4" />
           새로고침
         </button>
+      </div>
+
+      {/* Daily Run 테스트 패널 */}
+      <div className="glass rounded-2xl border border-border/50 p-5 space-y-4">
+        <div className="flex items-center gap-2">
+          <FlameIcon className="w-4 h-4 text-orange-400" />
+          <span className="font-bold text-sm">Daily Run 수동 실행</span>
+        </div>
+
+        <div className="flex items-center gap-4 flex-wrap">
+          <label className="flex items-center gap-2 text-sm cursor-pointer select-none">
+            <div
+              onClick={() => setForce(v => !v)}
+              className={cn(
+                "w-10 h-5 rounded-full transition-colors relative cursor-pointer",
+                force ? "bg-orange-500" : "bg-slate-600"
+              )}
+            >
+              <span className={cn(
+                "absolute top-0.5 w-4 h-4 rounded-full bg-white transition-transform shadow",
+                force ? "translate-x-5" : "translate-x-0.5"
+              )} />
+            </div>
+            <span className={force ? "text-orange-400 font-semibold" : "text-muted-foreground"}>
+              강제 실행 (오늘 데이터 덮어쓰기)
+            </span>
+          </label>
+
+          <button
+            onClick={handleRun}
+            disabled={running}
+            className={cn(
+              "flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all",
+              running
+                ? "bg-slate-700 text-muted-foreground cursor-not-allowed"
+                : "bg-orange-500/20 text-orange-400 border border-orange-500/30 hover:bg-orange-500/30"
+            )}
+          >
+            <PlayIcon className={cn("w-4 h-4", running && "animate-pulse")} />
+            {running ? "실행 중…" : "실행"}
+          </button>
+        </div>
+
+        {result && (
+          <div className={cn(
+            "rounded-xl p-4 text-xs font-mono whitespace-pre-wrap overflow-auto max-h-60",
+            result.ok ? "bg-score-up/5 border border-score-up/20 text-score-up" : "bg-score-down/5 border border-score-down/20 text-score-down"
+          )}>
+            {JSON.stringify(result.data, null, 2)}
+          </div>
+        )}
       </div>
 
       {/* Status Summary */}

@@ -157,10 +157,13 @@ export async function GET(req: NextRequest) {
   try {
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
 
-    // 2. 중복 실행 방지
-    const existing = await db.collection("publicScores").doc(date).get();
-    if (existing.exists) {
-      return NextResponse.json({ skipped: true, date, reason: "already generated" });
+    // 2. 중복 실행 방지 (force=true 면 스킵)
+    const force = req.nextUrl.searchParams.get("force") === "true";
+    if (!force) {
+      const existing = await db.collection("publicScores").doc(date).get();
+      if (existing.exists) {
+        return NextResponse.json({ skipped: true, date, reason: "already generated" });
+      }
     }
 
     // 3. 전날 점수 조회 (rankChange 계산용)
