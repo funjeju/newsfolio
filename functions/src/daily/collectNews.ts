@@ -40,7 +40,7 @@ export const collectNews = onSchedule(
 
     try {
       const response = await genai.models.generateContent({
-        model: "gemini-2.0-flash",
+        model: "gemini-2.5-flash",
         contents: [{ role: "user", parts: [{ text: NEWS_COLLECT_PROMPT }] }],
         config: {
           tools: [{ googleSearch: {} }],

@@ -22,8 +22,8 @@ interface SystemSettings {
 const DEFAULT: SystemSettings = {
   maxSchools: 50,
   maxStudentsPerSchool: 1000,
-  geminiModel: "gemini-2.0-flash",
-  geminiLiteModel: "gemini-2.0-flash-lite",
+  geminiModel: "gemini-2.5-flash",
+  geminiLiteModel: "gemini-2.5-flash-lite",
   aiDailyCallLimit: 5000,
   maintenanceMode: false,
   autoApprovalEnabled: true,

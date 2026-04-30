@@ -70,7 +70,7 @@ export const calcImpactScores = onSchedule(
       const prompt = buildSectorPrompt(sector.name, sector.keywords, articles);
       try {
         const response = await genai.models.generateContent({
-          model: "gemini-2.0-flash",
+          model: "gemini-2.5-flash",
           contents: [{ role: "user", parts: [{ text: prompt }] }],
           config: { temperature: 0.2 },
         });

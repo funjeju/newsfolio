@@ -38,7 +38,7 @@ async function generateAwardReason(
 JSON: { "reason": "수상 이유 한 문장" }`;
 
   const response = await genai.models.generateContent({
-    model: "gemini-2.0-flash-lite",
+    model: "gemini-2.5-flash-lite",
     contents: [{ role: "user", parts: [{ text: prompt }] }],
     config: { responseMimeType: "application/json" },
   });

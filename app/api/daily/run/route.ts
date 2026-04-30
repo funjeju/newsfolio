@@ -28,51 +28,40 @@ function getKSTDateStr(): string {
   return kst.toISOString().split("T")[0]; // "YYYY-MM-DD"
 }
 
-async function fetchNaverNews(
+async function fetchGoogleNews(
   keywords: string[]
 ): Promise<ImpactScoreInput["newsItems"]> {
-  const clientId = process.env.NAVER_CLIENT_ID;
-  const clientSecret = process.env.NAVER_CLIENT_SECRET;
-  if (!clientId || !clientSecret) return [];
+  const q = encodeURIComponent(keywords.slice(0, 2).join(" OR "));
+  try {
+    const res = await fetch(
+      `https://news.google.com/rss/search?q=${q}&hl=ko&gl=KR&ceid=KR:ko`,
+      { next: { revalidate: 0 } }
+    );
+    if (!res.ok) return [];
+    const xml = await res.text();
 
-  const headers = {
-    "X-Naver-Client-Id": clientId,
-    "X-Naver-Client-Secret": clientSecret,
-  };
+    const items: ImpactScoreInput["newsItems"] = [];
+    for (const m of xml.matchAll(/<item>([\s\S]*?)<\/item>/g)) {
+      const raw = m[1];
+      const tag = (name: string) =>
+        raw.match(new RegExp(`<${name}[^>]*>(?:<!\\[CDATA\\[)?([\\s\\S]*?)(?:\\]\\]>)?<\\/${name}>`))?.[1]
+          ?.replace(/<[^>]+>/g, "").trim() ?? "";
 
-  const toItems = (data: any): ImpactScoreInput["newsItems"] =>
-    (data.items ?? []).map((item: any) => ({
-      title: item.title.replace(/<[^>]+>/g, ""),
-      summary: item.description.replace(/<[^>]+>/g, ""),
-      source: item.originallink?.match(/\/\/([^/]+)/)?.[1]?.replace("www.", "") ?? "",
-      url: item.originallink ?? item.link ?? "",
-      publishedAt: item.pubDate,
-    }));
+      const title = tag("title");
+      const link = raw.match(/<link>([\s\S]*?)<\/link>/)?.[1]?.trim() ?? "";
+      const pubDate = tag("pubDate");
+      const summary = tag("description");
+      const source = tag("source");
 
-  // 1차: 메인 키워드 단독 검색 (AND 조건 없이 결과 최대화)
-  const q1 = encodeURIComponent(keywords[0]);
-  const [r1, r2] = await Promise.all([
-    fetch(`https://openapi.naver.com/v1/search/news.json?query=${q1}&display=10&sort=date`, { headers, next: { revalidate: 0 } }),
-    // 2차: 두 번째 키워드로 보조 검색
-    keywords[1]
-      ? fetch(`https://openapi.naver.com/v1/search/news.json?query=${encodeURIComponent(keywords[1])}&display=5&sort=date`, { headers, next: { revalidate: 0 } })
-      : Promise.resolve(null),
-  ]);
-
-  const items1 = r1.ok ? toItems(await r1.json()) : [];
-  const items2 = r2?.ok ? toItems(await r2.json()) : [];
-
-  // 제목 기준 중복 제거 후 최대 10개
-  const seen = new Set<string>();
-  const merged: ImpactScoreInput["newsItems"] = [];
-  for (const item of [...items1, ...items2]) {
-    if (!seen.has(item.title)) {
-      seen.add(item.title);
-      merged.push(item);
-      if (merged.length >= 10) break;
+      if (title) {
+        items.push({ title, summary, source, url: link, publishedAt: pubDate });
+        if (items.length >= 10) break;
+      }
     }
+    return items;
+  } catch {
+    return [];
   }
-  return merged;
 }
 
 // ── 영향도 점수 생성 ───────────────────────────────────────────────
@@ -93,7 +82,7 @@ async function generateImpactScore(
   previousScore?: number
 ): Promise<ScoreResult> {
   const sector = SECTORS[sectorId];
-  const newsItems = await fetchNaverNews(sector.keywords);
+  const newsItems = await fetchGoogleNews(sector.keywords);
 
   const input: ImpactScoreInput = {
     date,
@@ -106,7 +95,7 @@ async function generateImpactScore(
 
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash",
+      model: "gemini-2.5-flash",
       contents: buildImpactScorePrompt(input),
       config: { responseMimeType: "application/json" },
     });
@@ -140,7 +129,7 @@ async function generateBriefingHeadline(
 ): Promise<{ headline: string; intro: string }> {
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash",
+      model: "gemini-2.5-flash",
       contents: buildBriefingPrompt(input),
       config: { responseMimeType: "application/json" },
     });
